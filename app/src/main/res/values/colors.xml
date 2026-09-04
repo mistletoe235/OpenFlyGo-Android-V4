@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 玻璃面板：垂直渐变（顶亮底暗）+ 描边，营造半透明层次 -->
+    <color name="glass_top">#B30A0E13</color>
+    <color name="glass_bottom">#B30A0E13</color>
+    <color name="glass_top_bar">#C20A0D12</color>
+    <color name="glass_strong_top">#E60A0E13</color>
+    <color name="glass_strong_bottom">#E60A0E13</color>
+    <color name="glass_drawer_top">#F7202632</color>
+    <color name="glass_drawer_bottom">#F7141822</color>
+    <color name="glass_stroke">#24FFFFFF</color>
+    <color name="glass_stroke_strong">#24FFFFFF</color>
+
+    <!-- 按钮 -->
+    <color name="btn_neutral_fill">#24FFFFFF</color>
+    <color name="btn_neutral_stroke">#18FFFFFF</color>
+    <color name="btn_primary_fill">#A62997FF</color>
+    <color name="btn_primary_stroke">#522997FF</color>
+    <color name="btn_danger_fill">#52FF453A</color>
+    <color name="btn_danger_stroke">#66FF453A</color>
+    <color name="btn_shutter_fill">#F2E8EDF2</color>
+
+    <!-- 文字 -->
+    <color name="text_primary">#FFFFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="text_muted">#80FFFFFF</color>
+    <color name="text_accent_amber">#FFF2A33C</color>
+    <color name="text_ok_green">#FF82E6B4</color>
+    <color name="text_danger">#FFFF8080</color>
+    <color name="text_link_blue">#FF7FB3E8</color>
+
+    <!-- 杂项 -->
+    <color name="log_bg">#FF0B1016</color>
+    <color name="pill_fill">#26FFFFFF</color>
+</resources>

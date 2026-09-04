@@ -1,0 +1,11 @@
+{
+  "gs_gaussians_total": 7846148,
+  "gs_gaussians_in_scene": 7255315,
+  "alignment_correspondences": 1579,
+  "alignment_inliers": 1569,
+  "alignment_scale": 3.6908542608885364,
+  "alignment_median_error_m": 4.3671956469020365,
+  "original_photo_positions": 1657,
+  "new_survey_positions": 113,
+  "note": "Orthographic diagnostic splat from trained Gaussian centers/DC color; not a perspective screenshot."
+}

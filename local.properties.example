@@ -1,0 +1,8 @@
+## Copy this file to local.properties and edit the values for this machine.
+## Android Studio also manages sdk.dir automatically.
+
+sdk.dir=/path/to/Android/sdk
+OPENFLY_APPLICATION_ID_V4=com.example.openflygo.v4
+AIRCRAFT_API_KEY_V4=your_dji_msdk_v4_key_for_the_application_id
+BAIDU_MAP_AK_V4=your_baidu_android_ak_for_the_application_id_and_signing_certificate
+V86_DEFAULT_ENDPOINT=http://127.0.0.1:55000

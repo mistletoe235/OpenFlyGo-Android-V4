@@ -1,0 +1,36 @@
+{
+  "source_file": "https://huggingface.co/datasets/wangxiangyu0814/UAV-Flow/tree/main",
+  "prompt_field": "instruction_unified",
+  "items": [
+    {
+      "label": "TREE-L",
+      "instruction": "Navigate past the tree from the left side",
+      "source_row": 250000,
+      "source_episode": "2025-04-18_08-51-14"
+    },
+    {
+      "label": "TREE-R",
+      "instruction": "Need to make way past the tree from the right side",
+      "source_row": 30000,
+      "source_episode": "2025-04-17_13-45-55"
+    },
+    {
+      "label": "TREE-2-LR",
+      "instruction": "Go past the first tree from the left side, then approach the second tree from the right side",
+      "source_row": 120000,
+      "source_episode": "2025-04-19_09-15-21"
+    },
+    {
+      "label": "TREE-MID-R",
+      "instruction": "Make way through the middle tree from the right side",
+      "source_row": 220000,
+      "source_episode": "2025-04-28_13-24-04"
+    },
+    {
+      "label": "TREE-CCW",
+      "instruction": "Move about the tree in counterclockwise direction",
+      "source_row": 310000,
+      "source_episode": "2025-04-25_10-48-21"
+    }
+  ]
+}

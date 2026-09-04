@@ -1,0 +1,158 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+configurations.configureEach {
+    resolutionStrategy.force(
+            'org.jetbrains.kotlin:kotlin-stdlib:1.8.22',
+            'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22',
+            'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+    )
+}
+
+def localProperties = new Properties()
+def projectLocalPropertiesFile = rootProject.file('local.properties')
+if (projectLocalPropertiesFile.exists()) {
+    projectLocalPropertiesFile.withInputStream { stream -> localProperties.load(stream) }
+}
+def openFlyApplicationId = localProperties.getProperty(
+        'OPENFLY_APPLICATION_ID_V4',
+        project.findProperty('OPENFLY_APPLICATION_ID_V4') ?: 'com.openfly.go.v4'
+)
+def aircraftApiKey = localProperties.getProperty(
+        'AIRCRAFT_API_KEY_V4',
+        localProperties.getProperty(
+                'AIRCRAFT_API_KEY',
+                project.findProperty('AIRCRAFT_API_KEY_V4')
+                        ?: project.findProperty('AIRCRAFT_API_KEY')
+                        ?: ''
+        )
+)
+def baiduMapAk = localProperties.getProperty(
+        'BAIDU_MAP_AK_V4',
+        localProperties.getProperty(
+                'BAIDU_MAP_AK',
+                project.findProperty('BAIDU_MAP_AK_V4')
+                        ?: project.findProperty('BAIDU_MAP_AK')
+                        ?: ''
+        )
+)
+def globalBuildingHeightCogTemplate = localProperties.getProperty(
+        'GLOBAL_BUILDING_HEIGHT_COG_TEMPLATE',
+        project.findProperty('GLOBAL_BUILDING_HEIGHT_COG_TEMPLATE') ?: ''
+)
+def v86DefaultEndpoint = localProperties.getProperty(
+        'V86_DEFAULT_ENDPOINT',
+        project.findProperty('V86_DEFAULT_ENDPOINT') ?: 'http://127.0.0.1:55000'
+)
+def releaseSigningProperties = new Properties()
+def releaseSigningFile = rootProject.file('release-signing.properties')
+if (releaseSigningFile.exists()) {
+    releaseSigningFile.withInputStream { stream -> releaseSigningProperties.load(stream) }
+}
+
+android {
+    namespace 'edu.playground.djivln.mini2'
+    compileSdk 35
+
+    defaultConfig {
+        // Keep the MSDK V4 and V5 applications installable side by side.
+        applicationId openFlyApplicationId
+        minSdk 24
+        targetSdk 33
+        versionCode 2
+        versionName '0.3.0-v4'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        resourceConfigurations += ['en', 'zh-rCN']
+        manifestPlaceholders['API_KEY'] = aircraftApiKey
+        manifestPlaceholders['BAIDU_MAP_AK'] = baiduMapAk
+        buildConfigField 'String', 'GLOBAL_BUILDING_HEIGHT_COG_TEMPLATE',
+                '"' + globalBuildingHeightCogTemplate.replace('\\', '\\\\').replace('"', '\\"') + '"'
+        buildConfigField 'String', 'V86_DEFAULT_ENDPOINT',
+                '"' + v86DefaultEndpoint.replace('\\', '\\\\').replace('"', '\\"') + '"'
+
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+    }
+
+    signingConfigs {
+        release {
+            if (releaseSigningFile.exists()) {
+                storeFile rootProject.file(releaseSigningProperties.getProperty('storeFile'))
+                storePassword releaseSigningProperties.getProperty('storePassword')
+                keyAlias releaseSigningProperties.getProperty('keyAlias')
+                keyPassword releaseSigningProperties.getProperty('keyPassword')
+            }
+        }
+    }
+
+    buildTypes {
+        debug { minifyEnabled false }
+        release {
+            if (releaseSigningFile.exists()) signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        jniLibs { useLegacyPackaging true }
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        doNotStrip '*/*/libdjivideo.so'
+        doNotStrip '*/*/libSDKRelativeJNI.so'
+        doNotStrip '*/*/libFlyForbid.so'
+        doNotStrip '*/*/libDJIFlySafeCore.so'
+        doNotStrip '*/*/libdjifs_jni.so'
+        doNotStrip '*/*/libDJICommonJNI.so'
+        doNotStrip '*/*/libDJICSDKCommon.so'
+        doNotStrip '*/*/libDJIUpgradeCore.so'
+        doNotStrip '*/*/libDJIUpgradeJNI.so'
+        doNotStrip '*/*/libDJIWaypointV2Core.so'
+        doNotStrip '*/*/libDJIMOP.so'
+        doNotStrip '*/*/libDJISDKLOGJNI.so'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+        freeCompilerArgs += ['-Xjvm-default=all']
+    }
+    buildFeatures { buildConfig true }
+    androidResources { generateLocaleConfig true }
+}
+
+dependencies {
+    implementation('com.dji:dji-sdk:4.16.4') {
+        exclude module: 'library-anti-distortion'
+        exclude module: 'fly-safe-database'
+    }
+    compileOnly 'com.dji:dji-sdk-provided:4.16.4'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.exifinterface:exifinterface:1.3.6'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Map:8.2.0'
+    implementation 'org.locationtech.jts:jts-core:1.20.0'
+    // Pure-Java TIFF decoder. GeoTIFF CRS/georeferencing is validated by our
+    // terrain importer; no native GDAL runtime or broad storage permission.
+    implementation 'mil.nga:tiff:3.0.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+}
+
+def checkLocalizations = tasks.register('checkLocalizations', Exec) {
+    workingDir rootProject.projectDir
+    commandLine 'python3', 'scripts/check_localizations.py', '--strict-hardcoded', '--strict-source', '--strict-all-source'
+}
+
+tasks.named('preBuild').configure {
+    dependsOn checkLocalizations
+}

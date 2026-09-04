@@ -1,0 +1,43 @@
+{
+  "alignment": {
+    "det_rotation": 0.9999999999999989,
+    "correspondences": 1579,
+    "inliers": 1569,
+    "median_error_m": 4.3671956469020365,
+    "left_median_error_m": 3.7846403599119753,
+    "right_median_error_m": 5.26293727427105
+  },
+  "high_clusters_over_55m": [
+    {
+      "cells": 75,
+      "x": -110.25333333333333,
+      "y": -70.05333333333334,
+      "max_z": 56.181504226053505
+    },
+    {
+      "cells": 15,
+      "x": -157.66666666666666,
+      "y": -58.66666666666666,
+      "max_z": 57.24925707456518
+    },
+    {
+      "cells": 15,
+      "x": -207.8,
+      "y": -128.8,
+      "max_z": 63.69925671095739
+    },
+    {
+      "cells": 13,
+      "x": -122.38461538461539,
+      "y": -89.07692307692307,
+      "max_z": 57.155695673196455
+    },
+    {
+      "cells": 11,
+      "x": -97.72727272727272,
+      "y": -53.636363636363626,
+      "max_z": 55.36447931305109
+    }
+  ],
+  "conclusion": "alignment is not mirrored; current R8/R9 high-rise assignment misses taller left-building structures"
+}

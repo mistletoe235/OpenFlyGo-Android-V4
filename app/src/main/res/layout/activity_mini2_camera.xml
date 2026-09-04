@@ -1,0 +1,1280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_hud"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <TextureView
+        android:id="@+id/video_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/camera_live_view_description" />
+
+    <View
+        android:id="@+id/mock_video_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/camera_mock_view_description"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/mock_video_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="68dp"
+        android:background="#99101820"
+        android:padding="6dp"
+        android:text="@string/simulated_camera_ground"
+        android:textColor="@color/text_primary"
+        android:textSize="9sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/center_reticle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="＋"
+        android:textColor="#CCFFFFFF"
+        android:textSize="30sp" />
+
+    <!-- 顶部状态栏：左 飞机状态 / 中 模式 / 右 遥测 -->
+    <LinearLayout
+        android:id="@+id/top_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_gravity="top"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="5dp">
+
+        <Button
+            android:id="@+id/aircraft_status_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="112dp"
+            android:layout_height="40dp"
+            android:drawableStart="@drawable/ic_hud_drone"
+            android:drawablePadding="6dp"
+            android:text="@string/aircraft_disconnected"
+            android:textAllCaps="false"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/flight_mode_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_pill_status"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="5dp"
+            android:text="-- · GROUND"
+            android:textColor="@color/text_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/gps_status_text"
+            android:layout_width="82dp"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/ic_hud_satellite"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:text="GPS --"
+            android:textColor="@color/text_primary"
+            android:textSize="10sp" />
+
+        <edu.playground.djivln.mini2.SignalQualityView
+            android:id="@+id/rc_signal_view"
+            android:layout_width="26dp"
+            android:layout_height="28dp" />
+
+        <TextView
+            android:id="@+id/rc_status_text"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="--"
+            android:textColor="@color/text_primary"
+            android:textSize="10sp" />
+
+        <edu.playground.djivln.mini2.BatteryRingView
+            android:id="@+id/battery_ring"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/aircraft_battery_text"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="BAT --"
+            android:textColor="@color/text_ok_green"
+            android:textSize="10sp" />
+
+        <edu.playground.djivln.mini2.RemoteControllerBatteryView
+            android:id="@+id/rc_battery_text"
+            android:layout_width="52dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="5dp" />
+
+        <ImageButton
+            android:id="@+id/more_button"
+            android:layout_width="44dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/open_more_settings_description"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_hud_more" />
+    </LinearLayout>
+
+    <edu.playground.djivln.mini2.FlightEnduranceBarView
+        android:id="@+id/flight_endurance_bar"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_gravity="top"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginEnd="10dp" />
+
+    <!-- 中央飞行控制玻璃卡片 -->
+    <LinearLayout
+        android:id="@+id/flight_control_panel"
+        android:layout_width="430dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="88dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginStart="2dp"
+                android:background="@drawable/bg_dot_amber" />
+
+            <TextView
+                android:id="@+id/flight_status_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/manual_control_waiting"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/flight_panel_minimize_button"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="34dp"
+                android:layout_height="32dp"
+                android:contentDescription="@string/collapse_flight_controls_description"
+                android:text="−"
+                android:textAllCaps="false"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/flight_button_row"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button android:id="@+id/rth_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_return_home" android:textAllCaps="false" android:textSize="11sp" />
+            <Button android:id="@+id/cancel_rth_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_cancel_return_home" android:textAllCaps="false" android:textSize="11sp" />
+            <Button android:id="@+id/land_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_land" android:textAllCaps="false" android:textSize="11sp" />
+            <Button android:id="@+id/cancel_land_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="@string/action_cancel_landing" android:textAllCaps="false" android:textSize="11sp" />
+            <Button android:id="@+id/confirm_land_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginStart="6dp" android:text="@string/action_confirm_landing" android:textAllCaps="false" android:textSize="11sp" android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 左侧圆形起飞键 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="18dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/takeoff_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/action_hold_to_take_off"
+            android:text="↑"
+            android:textAllCaps="false"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/action_hold_to_take_off"
+            android:textColor="@color/text_secondary"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- 左下地图 -->
+    <FrameLayout
+        android:id="@+id/map_pane"
+        android:layout_width="170dp"
+        android:layout_height="96dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFE8EDF1" />
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/map_location_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#CC17212C"
+            android:gravity="center"
+            android:maxWidth="150dp"
+            android:paddingStart="8dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="5dp"
+            android:text="@string/map_waiting_for_location"
+            android:textColor="#FFFFFFFF"
+            android:textSize="8sp" />
+
+        <Button
+            android:id="@+id/map_layer_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="42dp"
+            android:layout_height="28dp"
+            android:contentDescription="@string/map_toggle_satellite_description"
+            android:layout_gravity="top|start"
+            android:layout_margin="4dp"
+            android:text="@string/map_satellite_compact"
+            android:textAllCaps="false"
+            android:textSize="8sp" />
+
+        <Button
+            android:id="@+id/survey_frame_all_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="42dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="4dp"
+            android:contentDescription="@string/map_fit_route_description"
+            android:text="@string/map_full_route"
+            android:textAllCaps="false"
+            android:textSize="8sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/survey_map_3d_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="42dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="96dp"
+            android:layout_marginTop="4dp"
+            android:contentDescription="@string/map_toggle_3d_description"
+            android:text="3D"
+            android:textAllCaps="false"
+            android:textSize="8sp"
+            android:visibility="gone" />
+
+        <edu.playground.djivln.survey.TerrainAltitudeLegendView
+            android:id="@+id/survey_terrain_altitude_legend"
+            android:layout_width="76dp"
+            android:layout_height="180dp"
+            android:layout_gravity="start|bottom"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="64dp"
+            android:elevation="9dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/home_direction_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="4dp"
+            android:background="#CC17212C"
+            android:paddingStart="6dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="3dp"
+            android:text="H ↑ -- m"
+            android:textColor="#FFFFFFFF"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/survey_eta_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="24dp"
+            android:background="#CC17212C"
+            android:gravity="center"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:textColor="#FFB8FFE8"
+            android:textSize="8sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="4dp"
+            android:background="#66000000"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="N ↑"
+            android:textColor="#CCFFFFFF"
+            android:textSize="9sp" />
+
+        <Button
+            android:id="@+id/map_toggle_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="42dp"
+            android:layout_height="28dp"
+            android:contentDescription="@string/map_fullscreen_description"
+            android:layout_gravity="top|end"
+            android:layout_margin="4dp"
+            android:text="@string/action_fullscreen_compact"
+            android:textAllCaps="false"
+            android:textSize="8sp" />
+
+        <Button
+            android:id="@+id/survey_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="46dp"
+            android:layout_height="28dp"
+            android:contentDescription="@string/open_survey_planner_description"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_margin="4dp"
+            android:text="@string/survey_route"
+            android:textAllCaps="false"
+            android:textSize="8sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:background="#CCFFFFFF"
+            android:padding="3dp"
+            android:text="@string/map_attribution_baidu"
+            android:textColor="#FF303030"
+            android:textSize="9sp" />
+
+        <!-- DJI Pilot 2 风格的地图任务摘要：规划结果留在地图上，避免占用参数面板。 -->
+        <LinearLayout
+            android:id="@+id/survey_map_summary"
+            android:layout_width="268dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="42dp"
+            android:background="@drawable/bg_survey_info"
+            android:clickable="true"
+            android:elevation="8dp"
+            android:importantForAccessibility="no"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/survey_status_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@string/survey_add_boundary_hint"
+                android:textColor="#FF20374A"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/survey_statistics_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:text="@string/survey_summary_placeholder"
+                android:textColor="#FF66717D"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/survey_execution_status_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:text="@string/survey_preflight_pending"
+                android:textColor="#FF8A5A20"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+
+            <!-- 执行信息属于航线任务摘要，不作为全局 HUD 浮层。 -->
+            <LinearLayout
+                android:id="@+id/survey_eta_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="#FFD9E1E8" />
+
+                <TextView
+                    android:id="@+id/survey_eta_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/survey_execution_phase_placeholder"
+                    android:textColor="#FF20374A"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/survey_eta_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/survey_eta_placeholder"
+                    android:textColor="#FF0B6E4F"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/survey_eta_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:maxLines="2"
+                    android:text="@string/survey_speed_placeholder"
+                    android:textColor="#FF66717D"
+                    android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Pilot 2 风格：地图保持为主画布，航线参数集中在右侧任务抽屉。 -->
+        <LinearLayout
+            android:id="@+id/survey_planner_panel"
+            android:layout_width="304dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="#F7F8FA"
+            android:clickable="true"
+            android:elevation="12dp"
+            android:importantForAccessibility="no"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="#FFFFFFFF"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_area_route" android:textColor="#FF20242A" android:textSize="16sp" android:textStyle="bold" />
+                    <EditText android:id="@+id/survey_name_input" android:layout_width="match_parent" android:layout_height="22dp" android:background="@android:color/transparent" android:hint="@string/survey_mission_name_hint" android:inputType="textCapSentences" android:maxLines="1" android:padding="0dp" android:singleLine="true" android:text="@string/survey_default_mission_name" android:textColor="#FF5A626D" android:textColorHint="#FF9AA1AA" android:textSize="9sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/survey_header_pause_button"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="64dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/action_pause"
+                    android:textAllCaps="false"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/survey_planner_abort_button"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="52dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/action_terminate"
+                    android:textAllCaps="false"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/survey_header_more_button"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:contentDescription="@string/survey_more_actions_description"
+                    android:text="⋯"
+                    android:textAllCaps="false"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/survey_close_button"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:contentDescription="@string/close_survey_planner_description"
+                    android:text="×"
+                    android:textAllCaps="false"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFE3E6EA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="#FFFFFFFF"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="4dp">
+
+                <Button android:id="@+id/survey_tab_area_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:text="@string/area" android:textAllCaps="false" android:textSize="9sp" />
+                <Button android:id="@+id/survey_tab_route_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/flight" android:textAllCaps="false" android:textSize="9sp" />
+                <Button android:id="@+id/survey_tab_capture_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/capture" android:textAllCaps="false" android:textSize="9sp" />
+                <Button android:id="@+id/survey_tab_terrain_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/terrain" android:textAllCaps="false" android:textSize="9sp" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFE3E6EA" />
+
+            <ScrollView
+                android:id="@+id/survey_planner_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:overScrollMode="never">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="14dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="12dp">
+
+                    <LinearLayout
+                        android:id="@+id/survey_terrain_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_height_above_ground" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+                    <CheckBox
+                        android:id="@+id/survey_terrain_enabled_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_survey_info"
+                        android:buttonTint="#FF3A78C2"
+                        android:checked="false"
+                        android:gravity="center_vertical"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/survey_enable_terrain_following"
+                        android:textColor="#FF244A68"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/survey_terrain_workflow_hint" android:textColor="#FF7A828D" android:textSize="9sp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="6dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="6dp" android:paddingEnd="6dp">
+                        <Button android:id="@+id/survey_dsm_import_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:text="@string/survey_import_surface_dsm" android:textAllCaps="false" android:textSize="8sp" />
+                        <Button android:id="@+id/survey_global_terrain_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/survey_download_bare_earth_dem" android:textAllCaps="false" android:textSize="8sp" />
+                        <Button android:id="@+id/survey_global_buildings_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_marginStart="4dp" android:layout_weight="1" android:text="@string/survey_building_height_file" android:textAllCaps="false" android:textSize="8sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="10dp" android:paddingEnd="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_elevation_data_type" android:textColor="#FF30353B" android:textSize="10sp" />
+                        <Spinner android:id="@+id/survey_terrain_kind_spinner" android:layout_width="158dp" android:layout_height="38dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+                    <edu.playground.djivln.survey.TerrainPreviewView android:id="@+id/survey_terrain_preview" android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone" />
+
+                    <TextView android:id="@+id/survey_dsm_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:background="@drawable/bg_survey_field" android:minHeight="40dp" android:padding="8dp" android:text="@string/survey_no_elevation_data_hint" android:textColor="#FF8A5A20" android:textSize="9sp" />
+
+                    <CheckBox android:id="@+id/survey_dsm_building_confirm" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:buttonTint="#FF3A78C2" android:minHeight="38dp" android:text="@string/survey_surface_dsm_confirmed" android:textColor="#FF505862" android:textSize="9sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/survey_area_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/planning_area" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:background="@drawable/bg_survey_info" android:padding="10dp" android:text="@string/survey_boundary_edit_hint" android:textColor="#FF38546D" android:textSize="9sp" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="@string/aircraft_capture" android:textColor="#FF5E6670" android:textSize="10sp" android:textStyle="bold" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="6dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="12dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dji_aircraft" android:textColor="#FF20242A" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_current_camera_wide" android:textColor="#FF808893" android:textSize="9sp" />
+                        </LinearLayout>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fixed_camera" android:textColor="#FF3A78C2" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/survey_route_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_flight_parameters" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="6dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_flight_altitude" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_altitude_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:hint="60" android:inputType="numberDecimal" android:singleLine="true" android:text="60" android:textColor="#FF20242A" android:textColorHint="#FF9AA1AA" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ground_sampling_distance_gsd" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/linked_to_flight_altitude_in_real_time" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/survey_gsd_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:hint="2.25" android:inputType="numberDecimal" android:singleLine="true" android:textColor="#FF20242A" android:textColorHint="#FF9AA1AA" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="cm/px" android:textColor="#FF7A828D" android:textSize="9sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_target_surface_relative_takeoff" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_waypoint_height_formula" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/survey_target_offset_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal|numberSigned" android:singleLine="true" android:text="0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_safe_takeoff_altitude" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_safe_takeoff_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="30" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/return_home_altitude" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:id="@+id/survey_rth_height_current" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_current_flight_controller_value" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/survey_rth_height_input" android:layout_width="58dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:hint="50" android:inputType="number" android:singleLine="true" android:textColor="#FF20242A" android:textColorHint="#FF9AA1AA" android:textSize="12sp" />
+                        <TextView android:layout_width="20dp" android:layout_height="wrap_content" android:gravity="end" android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                        <Button android:id="@+id/survey_rth_height_set_button" style="?android:attr/buttonStyleSmall" android:layout_width="54dp" android:layout_height="34dp" android:layout_marginStart="6dp" android:text="@string/action_write" android:textAllCaps="false" android:textSize="9sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_takeoff_method" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/survey_takeoff_mode_spinner" android:layout_width="178dp" android:layout_height="40dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_altitude_mode" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/survey_altitude_mode_spinner" android:layout_width="148dp" android:layout_height="40dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_route_start" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/survey_start_mode_spinner" android:layout_width="148dp" android:layout_height="40dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_after_mission" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/survey_completion_spinner" android:layout_width="148dp" android:layout_height="40dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_route_direction" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_heading_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:hint="0" android:inputType="numberDecimal|numberSigned" android:singleLine="true" android:text="0" android:textColor="#FF20242A" android:textColorHint="#FF9AA1AA" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="°" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_heading_strategy" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/survey_oblique_heading_mode_spinner" android:layout_width="178dp" android:layout_height="40dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_takeoff_speed" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_takeoff_speed_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="3.0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="m/s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_nadir_speed" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_speed_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:hint="3.0" android:inputType="numberDecimal" android:singleLine="true" android:text="3.0" android:textColor="#FF20242A" android:textColorHint="#FF9AA1AA" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="m/s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_speed" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_oblique_speed_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:hint="3.0" android:inputType="numberDecimal" android:singleLine="true" android:text="3.0" android:textColor="#FF20242A" android:textColorHint="#FF9AA1AA" android:textSize="12sp" />
+                        <TextView android:layout_width="38dp" android:layout_height="wrap_content" android:gravity="end" android:text="m/s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/survey_speed_limit_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/bg_survey_field"
+                        android:paddingStart="12dp"
+                        android:paddingTop="7dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="7dp"
+                        android:text="@string/survey_speed_limit_calculating"
+                        android:textColor="#FF68717C"
+                        android:textSize="10sp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_front_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_oblique_forward_overlap_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="70" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_side_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_oblique_side_overlap_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="60" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/survey_capture_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_image_coverage" android:textColor="#FF20242A" android:textSize="13sp" android:textStyle="bold" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="6dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_capture_trigger" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <Spinner android:id="@+id/survey_capture_mode_spinner" android:layout_width="148dp" android:layout_height="40dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/survey_timed_interval_row" android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp" android:visibility="gone">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_timed_capture_interval" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_timed_interval_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="1.0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="s" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_front_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_forward_overlap_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="80" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_side_overlap" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_side_overlap_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="70" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="%" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_boundary_expansion" android:textColor="#FF30353B" android:textSize="11sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/survey_ensure_edge_coverage" android:textColor="#FF969DA6" android:textSize="8sp" />
+                        </LinearLayout>
+                        <EditText android:id="@+id/survey_margin_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal" android:singleLine="true" android:text="0" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="m" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="1dp" android:background="@drawable/bg_survey_field" android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="12dp" android:paddingEnd="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/survey_oblique_capture_pitch" android:textColor="#FF30353B" android:textSize="11sp" />
+                        <EditText android:id="@+id/survey_gimbal_input" android:layout_width="72dp" android:layout_height="36dp" android:background="@android:color/transparent" android:gravity="end|center_vertical" android:inputType="numberDecimal|numberSigned" android:singleLine="true" android:text="-45" android:textColor="#FF20242A" android:textSize="12sp" />
+                        <TextView android:layout_width="26dp" android:layout_height="wrap_content" android:gravity="end" android:text="°" android:textColor="#FF7A828D" android:textSize="10sp" />
+                    </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFFFF"
+                android:orientation="vertical"
+                android:paddingStart="12dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout android:id="@+id/survey_edit_actions_row" android:layout_width="match_parent" android:layout_height="36dp" android:orientation="horizontal">
+                    <Button android:id="@+id/survey_center_aircraft_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:text="@string/locate_aircraft" android:textAllCaps="false" android:textSize="9sp" />
+                    <Button android:id="@+id/survey_undo_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:text="@string/undo" android:textAllCaps="false" android:textSize="9sp" />
+                    <Button android:id="@+id/survey_delete_vertex_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:text="@string/delete_selected_point" android:textAllCaps="false" android:textSize="9sp" />
+                    <Button android:id="@+id/survey_clear_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:text="@string/clear" android:textAllCaps="false" android:textSize="9sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/survey_capture_view_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView android:layout_width="wrap_content" android:layout_height="14dp" android:text="@string/survey_active_strips_hint" android:textColor="#FF59616B" android:textSize="8sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="34dp" android:orientation="horizontal">
+                        <Button android:id="@+id/survey_view_nadir_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:layout_marginEnd="3dp" android:text="@string/capture_view_1_nadir" android:textAllCaps="false" android:textSize="8sp" />
+                        <Button android:id="@+id/survey_view_forward_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:layout_marginEnd="3dp" android:text="@string/capture_view_2_front" android:textAllCaps="false" android:textSize="8sp" />
+                        <Button android:id="@+id/survey_view_backward_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:layout_marginEnd="3dp" android:text="@string/capture_view_3_rear" android:textAllCaps="false" android:textSize="8sp" />
+                        <Button android:id="@+id/survey_view_left_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:layout_marginEnd="3dp" android:text="@string/capture_view_4_left" android:textAllCaps="false" android:textSize="8sp" />
+                        <Button android:id="@+id/survey_view_right_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="32dp" android:layout_weight="1" android:text="@string/capture_view_5_right" android:textAllCaps="false" android:textSize="8sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/survey_active_recapture_groups_button"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="4dp"
+                    android:minWidth="0dp"
+                    android:text="@string/survey_recapture_groups_all"
+                    android:textAllCaps="false"
+                    android:textSize="9sp"
+                    android:visibility="gone" />
+
+                <LinearLayout android:id="@+id/survey_generate_actions_row" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="5dp" android:orientation="horizontal" android:visibility="gone">
+                    <Button android:id="@+id/survey_grid_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginEnd="5dp" android:text="@string/generate_nadir_route" android:textAllCaps="false" android:textSize="10sp" />
+                    <Button android:id="@+id/survey_crosshatch_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginEnd="5dp" android:text="@string/generate_five_direction_oblique" android:textAllCaps="false" android:textSize="10sp" />
+                    <Button android:id="@+id/survey_oblique_angle_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="0.72" android:minWidth="0dp" android:paddingStart="2dp" android:paddingEnd="2dp" android:text="@string/survey_pitch_minus_45" android:textAllCaps="false" android:textSize="9sp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="5dp" android:gravity="center_vertical" android:orientation="horizontal">
+                    <Button android:id="@+id/v86_open_button" style="?android:attr/buttonStyleSmall" android:layout_width="84dp" android:layout_height="40dp" android:layout_marginEnd="5dp" android:minWidth="0dp" android:text="@string/v86_cloud_reconstruction" android:textAllCaps="false" android:textSize="9sp" />
+                    <TextView android:id="@+id/v86_status_text" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:ellipsize="end" android:gravity="center_vertical" android:maxLines="2" android:text="@string/v86_not_configured" android:textColor="#FF66717D" android:textSize="8sp" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/survey_primary_actions_row" android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="5dp" android:orientation="horizontal">
+                    <Button android:id="@+id/survey_replay_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:layout_marginEnd="3dp" android:minWidth="0dp" android:paddingStart="0dp" android:paddingEnd="0dp" android:text="@string/preview" android:textAllCaps="false" android:textSize="9sp" />
+                    <Button android:id="@+id/survey_planner_preflight_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1.2" android:layout_marginEnd="3dp" android:minWidth="0dp" android:paddingStart="0dp" android:paddingEnd="0dp" android:text="@string/safety_check" android:textAllCaps="false" android:textSize="8sp" />
+                    <Button android:id="@+id/survey_planner_execute_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:minWidth="0dp" android:paddingStart="0dp" android:paddingEnd="0dp" android:text="@string/execution" android:textAllCaps="false" android:textSize="9sp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone">
+                    <Button android:id="@+id/survey_save_version_button" android:layout_width="1dp" android:layout_height="1dp" />
+                    <Button android:id="@+id/survey_library_button" android:layout_width="1dp" android:layout_height="1dp" />
+                    <Button android:id="@+id/survey_replay_stop_button" android:layout_width="1dp" android:layout_height="1dp" />
+                    <Button android:id="@+id/survey_import_button" android:layout_width="1dp" android:layout_height="1dp" />
+                    <Button android:id="@+id/survey_export_button" android:layout_width="1dp" android:layout_height="1dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- 遥测 HUD 卡片 -->
+    <LinearLayout
+        android:id="@+id/navigation_hud"
+        android:layout_width="258dp"
+        android:layout_height="86dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="186dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="2dp">
+
+        <TextView android:id="@+id/compass_text" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.9" android:gravity="center" android:text="N\nHDG --" android:textColor="@color/text_primary" android:textSize="10sp" android:textStyle="bold" />
+        <TextView android:id="@+id/speed_text" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="H.S --\nV.S --" android:textColor="@color/text_ok_green" android:textSize="10sp" android:fontFamily="monospace" />
+        <TextView android:id="@+id/altitude_text" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.3" android:gravity="center" android:text="H/B --\nAGL --\nASL~ --" android:textColor="@color/text_primary" android:textSize="9sp" android:fontFamily="monospace" />
+        <TextView android:id="@+id/distance_text" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="D --\nGIM --°" android:textColor="@color/text_primary" android:textSize="10sp" android:fontFamily="monospace" />
+        <TextView android:id="@+id/location_source_text" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.05" android:gravity="center" android:text="@string/gps_position_placeholder" android:textColor="@color/text_muted" android:textSize="8sp" />
+    </LinearLayout>
+
+    <!-- 右侧拍照/录像栏 -->
+    <LinearLayout
+        android:id="@+id/camera_action_rail"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="14dp"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:importantForAccessibility="no"
+        android:orientation="vertical"
+        android:padding="2dp">
+
+        <TextView android:id="@+id/camera_mode_text" android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone" />
+        <ImageButton android:id="@+id/shutter_button" android:layout_width="58dp" android:layout_height="58dp" android:layout_marginTop="6dp" android:background="@drawable/bg_shutter" android:contentDescription="@string/action_take_photo" android:padding="17dp" android:scaleType="centerInside" android:src="@drawable/ic_hud_camera_dark" />
+        <ImageButton android:id="@+id/record_button" android:layout_width="44dp" android:layout_height="44dp" android:layout_marginTop="8dp" android:background="@android:color/transparent" android:contentDescription="@string/action_record_video" android:padding="11dp" android:scaleType="centerInside" android:src="@drawable/ic_hud_video" />
+        <TextView android:id="@+id/recording_time_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:gravity="center" android:text="00:00" android:textColor="@color/text_accent_amber" android:textSize="11sp" android:fontFamily="monospace" />
+        <ImageButton android:id="@+id/gallery_button" android:layout_width="42dp" android:layout_height="42dp" android:layout_marginTop="6dp" android:background="@android:color/transparent" android:contentDescription="@string/open_aircraft_gallery_description" android:padding="10dp" android:scaleType="centerInside" android:src="@drawable/ic_hud_gallery" />
+    </LinearLayout>
+
+    <!-- 右下 VLN 面板 -->
+    <LinearLayout
+        android:id="@+id/vln_panel"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:padding="7dp"
+        android:visibility="gone">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="25dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:maxLines="1" android:text="VLN" android:textColor="@color/text_primary" android:textSize="15sp" android:textStyle="bold" />
+            <TextView android:id="@+id/safety_gate_text" android:layout_width="wrap_content" android:layout_height="24dp" android:background="@drawable/bg_pill_status" android:gravity="center" android:maxLines="1" android:paddingStart="10dp" android:paddingEnd="10dp" android:text="SAFE HOLD" android:textColor="@color/text_accent_amber" android:textSize="9sp" android:textStyle="bold" />
+            <Button android:id="@+id/model_monitor_button" style="?android:attr/buttonStyleSmall" android:layout_width="42dp" android:layout_height="28dp" android:layout_marginStart="6dp" android:text="@string/logs" android:textAllCaps="false" android:textSize="9sp" />
+            <ImageButton android:id="@+id/advanced_toggle_button" android:layout_width="36dp" android:layout_height="30dp" android:layout_marginStart="4dp" android:background="@android:color/transparent" android:contentDescription="@string/open_vln_settings_description" android:padding="7dp" android:scaleType="centerInside" android:src="@drawable/ic_hud_more" />
+            <Button android:id="@+id/vln_minimize_button" style="?android:attr/buttonStyleSmall" android:layout_width="34dp" android:layout_height="30dp" android:layout_marginStart="4dp" android:contentDescription="@string/collapse_vln_panel_description" android:text="−" android:textAllCaps="false" android:textSize="10sp" />
+        </LinearLayout>
+
+        <TextView android:id="@+id/model_status" android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone" />
+
+        <LinearLayout android:id="@+id/vln_body" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:layout_marginTop="2dp" android:gravity="center_vertical" android:orientation="horizontal">
+                <TextView android:layout_width="30dp" android:layout_height="match_parent" android:gravity="center_vertical" android:text="@string/task" android:textColor="@color/text_muted" android:textSize="10sp" />
+                <Spinner android:id="@+id/prompt_preset_spinner" android:layout_width="92dp" android:layout_height="30dp" android:popupBackground="@drawable/bg_dropdown" android:spinnerMode="dropdown" />
+                <EditText android:id="@+id/model_prompt" android:layout_width="0dp" android:layout_height="30dp" android:layout_marginStart="6dp" android:layout_weight="1" android:hint="@string/vln_prompt_hint" android:inputType="text" android:singleLine="true" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="31dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                <Button android:id="@+id/model_infer_once" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="29dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/vln_infer_once" android:textAllCaps="false" android:textSize="10sp" />
+                <Button android:id="@+id/auto_infer_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="29dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/vln_auto_off" android:textAllCaps="false" android:textSize="10sp" />
+                <Button android:id="@+id/emergency_stop_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="29dp" android:layout_weight="1" android:text="@string/emergency_stop" android:textAllCaps="false" android:textColor="@color/text_danger" android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="31dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                <Button android:id="@+id/model_load_main" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="29dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_load" android:textAllCaps="false" android:textSize="10sp" />
+                <Button android:id="@+id/control_toggle_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="29dp" android:layout_weight="1.2" android:layout_marginEnd="6dp" android:text="@string/vln_control_off" android:textAllCaps="false" android:textSize="10sp" />
+                <Button android:id="@+id/normal_stop_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="29dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_stop" android:textAllCaps="false" android:textSize="10sp" />
+                <Button android:id="@+id/reset_emergency_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="29dp" android:layout_weight="1" android:text="@string/vln_safe_reset" android:textAllCaps="false" android:textSize="9sp" />
+            </LinearLayout>
+
+            <TextView android:id="@+id/command_text" android:layout_width="match_parent" android:layout_height="22dp" android:layout_marginTop="2dp" android:ellipsize="end" android:gravity="center_vertical" android:maxLines="1" android:text="@string/vln_idle_command" android:textColor="@color/text_accent_amber" android:textSize="8.5sp" android:fontFamily="monospace" />
+            <TextView android:id="@+id/model_result" android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 设置页：DJI Fly 风格全屏 Tab 布局 -->
+    <LinearLayout
+        android:id="@+id/advanced_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="16dp"
+        android:visibility="gone">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="52dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <Button android:id="@+id/settings_tab_link" style="?android:attr/buttonStyleSmall" android:layout_width="72dp" android:layout_height="38dp" android:text="@string/link" android:textAllCaps="false" android:textSize="13sp" />
+            <Button android:id="@+id/settings_tab_flight" style="?android:attr/buttonStyleSmall" android:layout_width="72dp" android:layout_height="38dp" android:layout_marginStart="6dp" android:text="@string/autopilot" android:textAllCaps="false" android:textSize="13sp" />
+            <Button android:id="@+id/settings_tab_exec" style="?android:attr/buttonStyleSmall" android:layout_width="72dp" android:layout_height="38dp" android:layout_marginStart="6dp" android:text="@string/execution" android:textAllCaps="false" android:textSize="13sp" />
+            <Button android:id="@+id/settings_tab_system" style="?android:attr/buttonStyleSmall" android:layout_width="72dp" android:layout_height="38dp" android:layout_marginStart="6dp" android:text="@string/settings_system" android:textAllCaps="false" android:textSize="13sp" />
+            <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+            <Button android:id="@+id/advanced_close_button" style="?android:attr/buttonStyleSmall" android:layout_width="64dp" android:layout_height="40dp" android:text="@string/action_close" android:textAllCaps="false" />
+        </LinearLayout>
+
+        <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="false">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+                <LinearLayout android:id="@+id/settings_content_link" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/dji_account" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <Button android:id="@+id/dji_account_login_button" android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="4dp" android:text="@string/login_dji_account" android:textAllCaps="false" />
+                    <TextView android:id="@+id/dji_account_status_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/dji_account_checking" android:textColor="@color/text_accent_amber" android:textSize="9sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/dji_account_security_hint" android:textColor="@color/text_muted" android:textSize="9sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/model_transport_hint" android:textColor="@color/text_muted" android:textSize="11sp" android:visibility="gone" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <Button android:id="@+id/transport_local" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="LOCAL" android:textAllCaps="false" />
+                        <Button android:id="@+id/transport_usb" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="USB AOA" android:textAllCaps="false" />
+                        <Button android:id="@+id/transport_ethernet" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:text="@string/transport_ethernet" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <EditText android:id="@+id/ethernet_endpoint" android:layout_width="match_parent" android:layout_height="42dp" android:hint="http://192.168.60.2:5802" android:inputType="textUri" android:singleLine="true" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" android:visibility="gone" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="6dp" android:orientation="horizontal">
+                        <Button android:id="@+id/import_model" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/model_import_local_zip" android:textAllCaps="false" />
+                        <Button android:id="@+id/download_cloud_model" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:text="@string/model_download_uavflow" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <Button android:id="@+id/denoise_steps_button" android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="6dp" android:text="@string/uavflow_stop_threshold_default" android:textAllCaps="false" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="6dp" android:orientation="horizontal">
+                        <Button android:id="@+id/model_health" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/model_health" android:textAllCaps="false" />
+                        <Button android:id="@+id/model_load" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_load" android:textAllCaps="false" />
+                        <Button android:id="@+id/model_preflight" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_preflight" android:textAllCaps="false" />
+                        <Button android:id="@+id/model_start" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_start" android:textAllCaps="false" />
+                        <Button android:id="@+id/model_stop" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="@string/action_stop" android:textAllCaps="false" />
+                        <Button android:id="@+id/model_reset" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:text="@string/action_reset" android:textAllCaps="false" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/settings_content_flight" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/flight_control_safety" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <Button android:id="@+id/enable_vs_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/virtual_stick_enable" android:textAllCaps="false" />
+                        <Button android:id="@+id/disable_vs_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/virtual_stick_disable" android:textAllCaps="false" />
+                        <Button android:id="@+id/clear_emergency_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:text="@string/clear_emergency_only" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="8dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="110dp" android:layout_height="match_parent" android:gravity="center_vertical" android:text="@string/horizontal_speed_limit" android:textColor="@color/text_primary" android:textSize="12sp" />
+                        <SeekBar android:id="@+id/speed_limit_seek" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:max="38" android:progress="3" />
+                        <TextView android:id="@+id/speed_limit_text" android:layout_width="72dp" android:layout_height="match_parent" android:gravity="center" android:text="0.5 m/s" android:textColor="@color/text_primary" android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/settings_content_exec" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/vln_relative_position_execution" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <Button android:id="@+id/position_gps_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/gps_loop" android:textAllCaps="false" />
+                        <Button android:id="@+id/position_velocity_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:text="@string/velocity_estimate" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/manual_xyz_relative_position" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <EditText android:id="@+id/manual_x" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:hint="@string/manual_x_forward_hint" android:inputType="numberDecimal|numberSigned" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" />
+                        <EditText android:id="@+id/manual_y" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:hint="@string/manual_y_right_hint" android:inputType="numberDecimal|numberSigned" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" />
+                        <EditText android:id="@+id/manual_z" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:hint="@string/manual_z_up_hint" android:inputType="numberDecimal|numberSigned" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" />
+                        <Button android:id="@+id/manual_xyz_button" style="?android:attr/buttonStyleSmall" android:layout_width="100dp" android:layout_height="42dp" android:layout_marginEnd="6dp" android:text="@string/manual_xyz_execute" android:textAllCaps="false" />
+                        <Button android:id="@+id/manual_xyz_stop_button" style="?android:attr/buttonStyleSmall" android:layout_width="70dp" android:layout_height="42dp" android:text="@string/action_stop" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/manual_xyz_safety_hint" android:textColor="@color/text_muted" android:textSize="9sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="10dp" android:orientation="horizontal">
+                        <Button android:id="@+id/chunk_mode_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="0.9" android:layout_marginEnd="8dp" android:text="@string/uavflow_on" android:textAllCaps="false" />
+                        <Spinner android:id="@+id/chunk_steps_spinner" android:layout_width="84dp" android:layout_height="42dp" android:layout_marginEnd="8dp" android:spinnerMode="dropdown" />
+                        <Button android:id="@+id/flythrough_mode_button" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:text="@string/vln_flythrough_on" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <TextView android:id="@+id/chunk_help_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/vln_chunk_execution_hint" android:textColor="@color/text_muted" android:textSize="9sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/survey_settings_moved_hint" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <!-- Kept in the hierarchy for the shared execution renderer, but deliberately
+                         hidden: every SurveyMission action belongs to the map's 航线 panel. -->
+                    <LinearLayout android:layout_width="1dp" android:layout_height="1dp" android:orientation="vertical" android:visibility="gone">
+                        <Button android:id="@+id/survey_sim_gate_button" android:layout_width="1dp" android:layout_height="1dp" />
+                        <Button android:id="@+id/survey_sim_start_button" android:layout_width="1dp" android:layout_height="1dp" />
+                        <Button android:id="@+id/survey_sim_pause_button" android:layout_width="1dp" android:layout_height="1dp" />
+                        <Button android:id="@+id/survey_sim_abort_button" android:layout_width="1dp" android:layout_height="1dp" />
+                        <TextView android:id="@+id/survey_sim_gate_status" android:layout_width="1dp" android:layout_height="1dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/settings_content_system" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/interface_language" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <Button android:id="@+id/app_language_button" android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="4dp" android:text="@string/choose_language" android:textAllCaps="false" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/dji_built_in_simulator" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <Button android:id="@+id/simulator_toggle_button" android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="4dp" android:text="@string/simulator_off" android:textAllCaps="false" />
+                    <TextView android:id="@+id/simulator_status_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/simulator_waiting_capability" android:textColor="@color/text_muted" android:textSize="10sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/simulator_debug_keep_enabled_hint" android:textColor="@color/text_accent_amber" android:textSize="9sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/rc_usb_power" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <Button android:id="@+id/rc_phone_charging_button" android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="4dp" android:enabled="false" android:text="@string/rc_phone_charging_waiting" android:textAllCaps="false" />
+                    <TextView android:id="@+id/rc_phone_charging_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/rc_phone_charging_support_hint" android:textColor="@color/text_muted" android:textSize="9sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/runtime_status" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <TextView android:id="@+id/advanced_state_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:background="#55000000" android:minHeight="70dp" android:padding="8dp" android:text="@string/safety_state_waiting" android:textColor="#FFCFD8E3" android:textSize="11sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/hil_outbound_bridge_description" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <EditText android:id="@+id/ue_bridge_endpoint" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="4dp" android:hint="http://192.168.1.2:30010" android:inputType="textUri" android:singleLine="true" android:text="http://192.168.1.2:30010" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <Button android:id="@+id/ue_bridge_send_mission" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/hil_send_current_mission" android:textAllCaps="false" />
+                        <Button android:id="@+id/ue_bridge_toggle" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:text="@string/hil_telemetry_mirror_off" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <TextView android:id="@+id/ue_bridge_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/hil_contract_summary" android:textColor="@color/text_accent_amber" android:textSize="10sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/hil_realtime_closed_loop" android:textColor="@color/text_muted" android:textSize="11sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <Button android:id="@+id/hil_mode_hotspot" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/personal_hotspot" android:textAllCaps="false" />
+                        <Button android:id="@+id/hil_mode_lan" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:text="@string/hil_existing_lan" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <Button android:id="@+id/hil_open_hotspot_settings" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="4dp" android:text="@string/hil_open_hotspot_settings" android:textAllCaps="false" />
+                    <TextView android:id="@+id/hil_network_hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:paddingStart="4dp" android:paddingEnd="4dp" android:text="@string/hil_hotspot_discovery_hint" android:textColor="@color/text_link_blue" android:textSize="9sp" />
+                    <LinearLayout android:id="@+id/hil_lan_host_container" android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal" android:visibility="gone">
+                        <TextView android:layout_width="72dp" android:layout_height="42dp" android:gravity="center_vertical" android:text="@string/ue_address" android:textColor="@color/text_muted" android:textSize="10sp" />
+                        <EditText android:id="@+id/hil_host" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:hint="192.168.1.2" android:inputType="textUri" android:singleLine="true" android:text="192.168.1.2" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="8dp" android:orientation="vertical">
+                            <TextView android:layout_width="match_parent" android:layout_height="16dp" android:gravity="center" android:text="@string/hil_control_udp_port" android:textColor="@color/text_muted" android:textSize="9sp" />
+                            <EditText android:id="@+id/hil_udp_port" android:layout_width="match_parent" android:layout_height="36dp" android:gravity="center" android:hint="30020" android:inputType="number" android:paddingTop="0dp" android:paddingBottom="0dp" android:singleLine="true" android:text="30020" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" android:textSize="14sp" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="match_parent" android:layout_height="16dp" android:gravity="center" android:text="@string/hil_image_tcp_port" android:textColor="@color/text_muted" android:textSize="9sp" />
+                            <EditText android:id="@+id/hil_frame_port" android:layout_width="match_parent" android:layout_height="36dp" android:gravity="center" android:hint="30022" android:inputType="number" android:paddingTop="0dp" android:paddingBottom="0dp" android:singleLine="true" android:text="30022" android:textColor="@color/text_primary" android:textColorHint="@color/text_muted" android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <TextView android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:gravity="center_vertical" android:text="@string/hil_simulator_state_rate" android:textColor="@color/text_muted" android:textSize="10sp" />
+                        <Spinner android:id="@+id/hil_simulator_rate_spinner" android:layout_width="116dp" android:layout_height="42dp" android:spinnerMode="dropdown" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <Button android:id="@+id/hil_link_toggle" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/hil_link_off" android:textAllCaps="false" />
+                        <Button android:id="@+id/hil_frame_toggle" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:enabled="false" android:text="@string/hil_image_source_dji" android:textAllCaps="false" />
+                        <Button android:id="@+id/hil_frame_preview" style="?android:attr/buttonStyleSmall" android:layout_width="0dp" android:layout_height="42dp" android:layout_weight="0.7" android:enabled="false" android:text="@string/hil_preview_ue_frame" android:textAllCaps="false" />
+                    </LinearLayout>
+                    <TextView android:id="@+id/hil_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:background="#55000000" android:minHeight="48dp" android:padding="6dp" android:text="@string/hil_not_started_ports" android:textColor="@color/text_accent_amber" android:textSize="10sp" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/hil_ue_frame_behavior_hint" android:textColor="@color/text_muted" android:textSize="9sp" />
+                    <Button android:id="@+id/survey_real_readiness_button" android:layout_width="1dp" android:layout_height="1dp" android:visibility="gone" />
+                    <TextView android:id="@+id/survey_real_readiness_status" android:layout_width="1dp" android:layout_height="1dp" android:text="@string/survey_real_auto_disabled" android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- 运行日志 -->
+    <LinearLayout
+        android:id="@+id/model_monitor_panel"
+        android:layout_width="320dp"
+        android:layout_height="95dp"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="142dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:id="@+id/monitor_title" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical" android:text="@string/runtime_logs" android:textColor="@color/text_primary" android:textSize="13sp" android:textStyle="bold" />
+            <Button android:id="@+id/monitor_follow_button" style="?android:attr/buttonStyleSmall" android:layout_width="60dp" android:layout_height="28dp" android:text="@string/logs_follow_on" android:textAllCaps="false" android:textSize="9sp" />
+            <Button android:id="@+id/monitor_clear_button" style="?android:attr/buttonStyleSmall" android:layout_width="46dp" android:layout_height="28dp" android:text="@string/clear" android:textAllCaps="false" android:textSize="9sp" />
+            <Button android:id="@+id/monitor_close_button" style="?android:attr/buttonStyleSmall" android:layout_width="46dp" android:layout_height="28dp" android:text="@string/action_close" android:textAllCaps="false" android:textSize="9sp" />
+        </LinearLayout>
+        <ScrollView android:id="@+id/log_scroll" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="@color/log_bg">
+            <TextView android:id="@+id/log_text" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="5dp" android:text="@string/logs_started" android:textColor="@color/text_ok_green" android:textIsSelectable="true" android:textSize="9sp" android:fontFamily="monospace" />
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- 相册：DJI Fly 风格全屏缩略图网格 -->
+    <LinearLayout
+        android:id="@+id/gallery_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:visibility="gone">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="52dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <Button android:id="@+id/gallery_close_button" style="?android:attr/buttonStyleSmall" android:layout_width="64dp" android:layout_height="40dp" android:text="@string/action_back" android:textAllCaps="false" android:textSize="13sp" />
+            <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="@string/gallery_aircraft_media" android:textColor="@color/text_primary" android:textSize="16sp" android:textStyle="bold" />
+            <Button android:id="@+id/gallery_refresh_button" style="?android:attr/buttonStyleSmall" android:layout_width="64dp" android:layout_height="40dp" android:text="@string/action_refresh" android:textAllCaps="false" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="34dp" android:layout_gravity="center_horizontal" android:gravity="center_vertical" android:orientation="horizontal">
+            <Button android:id="@+id/gallery_filter_all" style="?android:attr/buttonStyleSmall" android:layout_width="76dp" android:layout_height="30dp" android:text="@string/filter_all" android:textAllCaps="false" android:textSize="11sp" />
+            <Button android:id="@+id/gallery_filter_photo" style="?android:attr/buttonStyleSmall" android:layout_width="76dp" android:layout_height="30dp" android:layout_marginStart="8dp" android:text="@string/filter_photos" android:textAllCaps="false" android:textSize="11sp" />
+            <Button android:id="@+id/gallery_filter_video" style="?android:attr/buttonStyleSmall" android:layout_width="76dp" android:layout_height="30dp" android:layout_marginStart="8dp" android:text="@string/filter_videos" android:textAllCaps="false" android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:gravity="center" android:text="@string/gallery_mode_switch_hint" android:textColor="@color/text_muted" android:textSize="9sp" />
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="6dp" android:layout_weight="1">
+            <GridView android:id="@+id/gallery_grid" android:layout_width="match_parent" android:layout_height="match_parent" android:horizontalSpacing="6dp" android:numColumns="5" android:stretchMode="columnWidth" android:verticalSpacing="6dp" />
+            <TextView android:id="@+id/gallery_list_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:padding="16dp" android:text="@string/gallery_refresh_hint" android:textColor="@color/text_secondary" android:textSize="12sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="130dp"
+        android:layout_marginStart="14dp"
+        android:background="#A0000000"
+        android:maxLines="3"
+        android:padding="7dp"
+        android:text="@string/app_starting_msdk4"
+        android:textColor="@color/text_primary"
+        android:textSize="10sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/toast_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/bg_pill_status"
+        android:paddingStart="18dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="18dp"
+        android:paddingBottom="9dp"
+        android:textColor="@color/text_primary"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/survey_photo_capture_feedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_pill_status"
+        android:paddingStart="18dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="18dp"
+        android:paddingBottom="9dp"
+        android:text="@string/captured_indicator"
+        android:textColor="@color/text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</FrameLayout>

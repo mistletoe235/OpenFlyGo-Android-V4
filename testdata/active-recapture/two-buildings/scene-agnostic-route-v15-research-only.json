@@ -1,0 +1,3808 @@
+{
+  "method": "scene-agnostic entity-level acquisition-deficit route",
+  "ground_truth_used": false,
+  "gs_used_for_route": false,
+  "mission_policy": "high_confidence_with_diagnostics",
+  "sensitivity_plan_used": true,
+  "preview_geometry_is_not_collision_guarantee": true,
+  "camera_geometry_reference": {
+    "source": "stable_same_flight_surfaces",
+    "horizontal_standoff_m": 62.772312413639526,
+    "horizontal_standoff_p20_m": 42.413872454687485,
+    "horizontal_standoff_p80_m": 80.65235640005226,
+    "elevation_deg": 34.22309271589093,
+    "peer_observations": 107
+  },
+  "adaptive_entity_utility_threshold": 1.5249658491034024,
+  "flight_envelope": "convex hull of ordinary-GPS survey positions",
+  "altitude_bounds_m": [
+    59.884,
+    120.0
+  ],
+  "entities": 10,
+  "entity_order": [
+    3,
+    22,
+    10,
+    11,
+    23,
+    1,
+    2,
+    26,
+    29,
+    28
+  ],
+  "survey_captures": 57,
+  "bridge_captures": 97,
+  "total_captures": 154,
+  "capture_path_distance_m": 2714.9524505798954,
+  "transit_distance_m": 1188.4288676666808,
+  "route_distance_m": 3903.3813182465765,
+  "estimated_time_s_at_5mps_2s_capture": 1088.6762636493154,
+  "entity_summaries": [
+    {
+      "entity_id": 1,
+      "member_ranks": [
+        1,
+        31,
+        14
+      ],
+      "member_count": 3,
+      "target_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "member_extent_xy_m": [
+        34.6567279208208,
+        4.586743123107084
+      ],
+      "evidence_modes": [
+        "cross_window_conflict",
+        "single_window_prominent_unknown"
+      ],
+      "selection_utility": 1.6042313500819385,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 37.87465858459473,
+      "supported_existing_views": 0,
+      "azimuth_support_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "missing_azimuth_bins": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "recommended_action": "elevated_oblique_scan",
+      "existing_standoff_median_m": null,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "height",
+      "anchor_image": "2_DJI_0694.JPG",
+      "anchor_position_world_xyz_m": [
+        -201.8079220211509,
+        -31.918915603045605,
+        82.09929426821878
+      ],
+      "capture_count": 15
+    },
+    {
+      "entity_id": 3,
+      "member_ranks": [
+        4,
+        11,
+        40,
+        42
+      ],
+      "member_count": 4,
+      "target_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "member_extent_xy_m": [
+        26.12381491321895,
+        25.681924774496707
+      ],
+      "evidence_modes": [
+        "cross_window_conflict",
+        "sfm_structure_scal3r_collapse"
+      ],
+      "selection_utility": 1.5904966024132263,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 26.872671127319336,
+      "supported_existing_views": 2,
+      "azimuth_support_counts": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "missing_azimuth_bins": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "recommended_action": "elevated_oblique_scan",
+      "existing_standoff_median_m": 105.3612902558696,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "height",
+      "anchor_image": "2_DJI_0508.JPG",
+      "anchor_position_world_xyz_m": [
+        -163.31655019579426,
+        -143.44380680732414,
+        77.8210852372566
+      ],
+      "capture_count": 11
+    },
+    {
+      "entity_id": 10,
+      "member_ranks": [
+        12,
+        22
+      ],
+      "member_count": 2,
+      "target_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "member_extent_xy_m": [
+        2.398096273182034,
+        19.594406446601624
+      ],
+      "evidence_modes": [
+        "cross_window_conflict",
+        "sfm_structure_scal3r_collapse"
+      ],
+      "selection_utility": 1.5402004182589946,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 25.38115406036377,
+      "supported_existing_views": 0,
+      "azimuth_support_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "missing_azimuth_bins": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "recommended_action": "elevated_oblique_scan",
+      "existing_standoff_median_m": null,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "height",
+      "anchor_image": "2_DJI_0856.JPG",
+      "anchor_position_world_xyz_m": [
+        -153.84859703298994,
+        -67.53074491217139,
+        77.64979434161953
+      ],
+      "capture_count": 15
+    },
+    {
+      "entity_id": 11,
+      "member_ranks": [
+        13,
+        15,
+        33
+      ],
+      "member_count": 3,
+      "target_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "member_extent_xy_m": [
+        17.555694443623906,
+        31.708024475796975
+      ],
+      "evidence_modes": [
+        "cross_window_conflict",
+        "sfm_structure_scal3r_collapse"
+      ],
+      "selection_utility": 1.5396828439055859,
+      "relative_upper_layer_strength": 1.5709816639762195,
+      "maximum_relative_height_m": 15.611261367797852,
+      "supported_existing_views": 2,
+      "azimuth_support_counts": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "missing_azimuth_bins": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "recommended_action": "elevated_oblique_scan",
+      "existing_standoff_median_m": 46.54427393423872,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "height",
+      "anchor_image": "2_DJI_0460.JPG",
+      "anchor_position_world_xyz_m": [
+        -35.54435518795398,
+        -84.05135465693364,
+        74.05232961011222
+      ],
+      "capture_count": 16
+    },
+    {
+      "entity_id": 22,
+      "member_ranks": [
+        41,
+        46,
+        30
+      ],
+      "member_count": 3,
+      "target_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "member_extent_xy_m": [
+        24.764000579628714,
+        21.706192301042336
+      ],
+      "evidence_modes": [
+        "cross_window_conflict",
+        "sfm_structure_scal3r_collapse",
+        "single_window_prominent_unknown"
+      ],
+      "selection_utility": 1.3748591069773948,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 25.440561294555664,
+      "supported_existing_views": 2,
+      "azimuth_support_counts": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "missing_azimuth_bins": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "recommended_action": "elevated_oblique_scan",
+      "existing_standoff_median_m": 88.53347271065864,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "height",
+      "anchor_image": "2_DJI_0506.JPG",
+      "anchor_position_world_xyz_m": [
+        -115.62053167285809,
+        -136.86682018940695,
+        79.99188773882275
+      ],
+      "capture_count": 15
+    },
+    {
+      "entity_id": 23,
+      "member_ranks": [
+        26
+      ],
+      "member_count": 1,
+      "target_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "member_extent_xy_m": [
+        0.0,
+        0.0
+      ],
+      "evidence_modes": [
+        "single_window_prominent_unknown"
+      ],
+      "selection_utility": 1.3643477053825497,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 32.52977657318115,
+      "supported_existing_views": 0,
+      "azimuth_support_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "missing_azimuth_bins": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "recommended_action": "elevated_oblique_scan",
+      "existing_standoff_median_m": null,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "height",
+      "anchor_image": "2_DJI_0691.JPG",
+      "anchor_position_world_xyz_m": [
+        -121.3504520172755,
+        -28.66604505941943,
+        74.13325741866056
+      ],
+      "capture_count": 13
+    },
+    {
+      "entity_id": 26,
+      "member_ranks": [
+        44
+      ],
+      "member_count": 1,
+      "target_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "member_extent_xy_m": [
+        0.0,
+        0.0
+      ],
+      "evidence_modes": [
+        "single_window_prominent_unknown"
+      ],
+      "selection_utility": 1.1691652420930603,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 28.429895401000977,
+      "supported_existing_views": 0,
+      "azimuth_support_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "missing_azimuth_bins": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "recommended_action": "elevated_oblique_scan",
+      "existing_standoff_median_m": null,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "height",
+      "anchor_image": "2_DJI_0418.JPG",
+      "anchor_position_world_xyz_m": [
+        -126.96512684896703,
+        -49.65481325549894,
+        73.47439329664664
+      ],
+      "capture_count": 13
+    },
+    {
+      "entity_id": 2,
+      "member_ranks": [
+        3,
+        36,
+        39
+      ],
+      "member_count": 3,
+      "target_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "member_extent_xy_m": [
+        23.05209865670591,
+        19.963195957041282
+      ],
+      "evidence_modes": [
+        "cross_window_conflict",
+        "sfm_structure_scal3r_collapse"
+      ],
+      "selection_utility": 1.5908184615384617,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 27.75605010986328,
+      "supported_existing_views": 5,
+      "azimuth_support_counts": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "missing_azimuth_bins": [
+        0,
+        3,
+        4,
+        5
+      ],
+      "recommended_action": "missing_direction_rescan",
+      "existing_standoff_median_m": 18.47093533357267,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "direction",
+      "anchor_image": "1_DJI_0893.JPG",
+      "anchor_position_world_xyz_m": [
+        -224.84113571205773,
+        14.181514364880286,
+        81.47096681531077
+      ],
+      "capture_count": 9
+    },
+    {
+      "entity_id": 29,
+      "member_ranks": [
+        7,
+        34,
+        43,
+        24
+      ],
+      "member_count": 4,
+      "target_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "member_extent_xy_m": [
+        21.467230836104818,
+        29.15332157534297
+      ],
+      "evidence_modes": [
+        "cross_window_conflict",
+        "single_window_prominent_unknown"
+      ],
+      "selection_utility": 1.572567835651232,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 25.785327911376953,
+      "supported_existing_views": 2,
+      "azimuth_support_counts": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "missing_azimuth_bins": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        7
+      ],
+      "recommended_action": "diagnostic_cross_view",
+      "existing_standoff_median_m": 13.749782628682713,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "uncertain_geometry",
+      "diagnostic_only": true,
+      "sensitivity_plan_only": true,
+      "prominence_reference_m": 6.805158805847167,
+      "anchor_image": "2_DJI_0170.JPG",
+      "anchor_position_world_xyz_m": [
+        253.07323645420763,
+        -68.24001904474704,
+        89.02512487601004
+      ],
+      "capture_count": 8
+    },
+    {
+      "entity_id": 28,
+      "member_ranks": [
+        29
+      ],
+      "member_count": 1,
+      "target_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "member_extent_xy_m": [
+        0.0,
+        0.0
+      ],
+      "evidence_modes": [
+        "single_window_prominent_unknown"
+      ],
+      "selection_utility": 1.151209525882276,
+      "relative_upper_layer_strength": 2.0,
+      "maximum_relative_height_m": 28.07813262939453,
+      "supported_existing_views": 7,
+      "azimuth_support_counts": [
+        2,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        2
+      ],
+      "missing_azimuth_bins": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "recommended_action": "diagnostic_cross_view",
+      "existing_standoff_median_m": 57.62881358838157,
+      "stable_standoff_range_m": [
+        31.810404341015612,
+        100.81544550006532
+      ],
+      "acquisition_deficit_type": "uncertain_geometry",
+      "diagnostic_only": true,
+      "anchor_image": "2_DJI_0583.JPG",
+      "anchor_position_world_xyz_m": [
+        260.1298782813468,
+        -68.4519965420133,
+        79.08882981518019
+      ],
+      "capture_count": 8
+    }
+  ],
+  "transit_segments": [
+    {
+      "from_world_xyz_m": [
+        -270.81710286833675,
+        -137.1363360338455,
+        88.883
+      ],
+      "to_world_xyz_m": [
+        -163.31655019579426,
+        -143.44380680732414,
+        77.8210852372566
+      ],
+      "entity_id": 3
+    },
+    {
+      "from_world_xyz_m": [
+        -259.1366200337409,
+        -194.27717905687643,
+        92.61669734850209
+      ],
+      "to_world_xyz_m": [
+        -115.62053167285809,
+        -136.86682018940695,
+        79.99188773882275
+      ],
+      "entity_id": 22
+    },
+    {
+      "from_world_xyz_m": [
+        -164.93892200317714,
+        -97.35237457074538,
+        95.69581743949286
+      ],
+      "to_world_xyz_m": [
+        -153.84859703298994,
+        -67.53074491217139,
+        77.64979434161953
+      ],
+      "entity_id": 10
+    },
+    {
+      "from_world_xyz_m": [
+        -71.18062134823411,
+        -103.39010067937029,
+        96.58494285264827
+      ],
+      "to_world_xyz_m": [
+        -35.54435518795398,
+        -84.05135465693364,
+        74.05232961011222
+      ],
+      "entity_id": 11
+    },
+    {
+      "from_world_xyz_m": [
+        -50.728186298578684,
+        -49.00839725318387,
+        91.36392286300784
+      ],
+      "to_world_xyz_m": [
+        -121.3504520172755,
+        -28.66604505941943,
+        74.13325741866056
+      ],
+      "entity_id": 23
+    },
+    {
+      "from_world_xyz_m": [
+        -187.06881734463178,
+        -63.506112585927326,
+        107.62856360732833
+      ],
+      "to_world_xyz_m": [
+        -201.8079220211509,
+        -31.918915603045605,
+        82.09929426821878
+      ],
+      "entity_id": 1
+    },
+    {
+      "from_world_xyz_m": [
+        -278.93106926932757,
+        -104.46306034204545,
+        109.98929756619114
+      ],
+      "to_world_xyz_m": [
+        -224.84113571205773,
+        14.181514364880286,
+        81.47096681531077
+      ],
+      "entity_id": 2
+    },
+    {
+      "from_world_xyz_m": [
+        -168.59817636815774,
+        4.467897149128337,
+        84.05710956163608
+      ],
+      "to_world_xyz_m": [
+        -126.96512684896703,
+        -49.65481325549894,
+        73.47439329664664
+      ],
+      "entity_id": 26
+    },
+    {
+      "from_world_xyz_m": [
+        -209.41537339734202,
+        -90.99750951031828,
+        103.54554625808517
+      ],
+      "to_world_xyz_m": [
+        253.07323645420763,
+        -68.24001904474704,
+        89.02512487601004
+      ],
+      "entity_id": 29
+    },
+    {
+      "from_world_xyz_m": [
+        315.9201789502304,
+        -76.61865414290521,
+        90.77664709045649
+      ],
+      "to_world_xyz_m": [
+        260.1298782813468,
+        -68.4519965420133,
+        79.08882981518019
+      ],
+      "entity_id": 28
+    }
+  ],
+  "route": [
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -180.21295091615337,
+        -127.43639654139491,
+        82.7529559410051
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -155.77550621158593,
+      "pitch_world_deg": -28.371851360386117,
+      "route_index": 0,
+      "distance_from_previous_capture_m": 91.32786331288362
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -198.98296708816315,
+        -117.9426854987035,
+        87.68482664475358
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -142.5836670552927,
+      "pitch_world_deg": -34.76926171049614,
+      "route_index": 1,
+      "distance_from_previous_capture_m": 21.604800510491227
+    },
+    {
+      "role": "elevated_oblique_scan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -217.6157151637591,
+        -114.85503781913769,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -129.39182789899942,
+      "pitch_world_deg": -42.184823760129454,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 2,
+      "distance_from_previous_capture_m": 19.52014901788009
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -234.66897764702492,
+        -110.19898391516588,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -112.5,
+      "pitch_world_deg": -44.56900533531724,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 3,
+      "distance_from_previous_capture_m": 17.677460204448288
+    },
+    {
+      "role": "elevated_oblique_scan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -250.0197824793649,
+        -101.43283366096303,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -95.60817210100056,
+      "pitch_world_deg": -42.18482376012945,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 4,
+      "distance_from_previous_capture_m": 17.677460204448295
+    },
+    {
+      "role": "overlap_anchor",
+      "capture_kind": "survey",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -237.13277432969045,
+        -116.14711528138683,
+        82.7712347321908
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -112.49999999999999,
+      "pitch_world_deg": -42.41787762807624,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 5,
+      "distance_from_previous_capture_m": 21.8979039358588
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -257.2775366886515,
+        -119.84172822307892,
+        86.05305560429457
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -88.13060929966653,
+      "pitch_world_deg": -49.110553282157156,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 6,
+      "distance_from_previous_capture_m": 20.74203373646152
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -272.80527979886665,
+        -127.23737582964927,
+        89.33487647639832
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -63.761218599333,
+      "pitch_world_deg": -53.39092641034359,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 7,
+      "distance_from_previous_capture_m": 17.509333449734182
+    },
+    {
+      "role": "elevated_oblique_scan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -285.0793734005152,
+        -137.55194203715192,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -39.39182789899943,
+      "pitch_world_deg": -55.39951601264152,
+      "flight_envelope_fraction": 0.5751836689568586,
+      "route_index": 8,
+      "distance_from_previous_capture_m": 16.365023618301347
+    },
+    {
+      "role": "elevated_oblique_scan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -288.84871616081375,
+        -158.26483096651577,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": -5.6081721010005845,
+      "pitch_world_deg": -58.8279898178837,
+      "flight_envelope_fraction": 0.5043871564253123,
+      "route_index": 9,
+      "distance_from_previous_capture_m": 21.053068960243756
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -280.0984587434969,
+        -171.51437357435023,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": 22.49999999999999,
+      "pitch_world_deg": -64.42862415301168,
+      "flight_envelope_fraction": 0.9040560477636227,
+      "route_index": 10,
+      "distance_from_previous_capture_m": 15.878204690270532
+    },
+    {
+      "role": "elevated_oblique_scan_side3_1",
+      "capture_kind": "survey",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -271.6639377992887,
+        -180.67355861769033,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": 50.608172101000534,
+      "pitch_world_deg": -65.59995607908452,
+      "flight_envelope_fraction": 0.37821159112884983,
+      "route_index": 11,
+      "distance_from_previous_capture_m": 12.451177222111644
+    },
+    {
+      "role": "elevated_oblique_scan_side3_2",
+      "capture_kind": "survey",
+      "entity_id": 3,
+      "position_world_xyz_m": [
+        -259.1366200337409,
+        -194.27717905687643,
+        92.61669734850209
+      ],
+      "look_at_world_xyz_m": [
+        -255.91791887575167,
+        -161.49846601562683,
+        37.91968281343938
+      ],
+      "yaw_world_deg": 84.39182789899947,
+      "pitch_world_deg": -58.94532361163402,
+      "flight_envelope_fraction": 0.5020577460982667,
+      "route_index": 12,
+      "distance_from_previous_capture_m": 18.493030564308597
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -122.29225002468631,
+        -157.81777775889736,
+        82.2353062674899
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 170.40771542615755,
+      "pitch_world_deg": -26.835006357621978,
+      "route_index": 13,
+      "distance_from_previous_capture_m": 141.9980381095423
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -133.55027015926706,
+        -175.0398545078432,
+        84.47872479615707
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 155.97675231281465,
+      "pitch_world_deg": -29.882548964968514,
+      "route_index": 14,
+      "distance_from_previous_capture_m": 20.69724309158041
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -147.98380675908203,
+        -187.6578488104871,
+        86.72214332482423
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 141.54578919947176,
+      "pitch_world_deg": -33.218327737093695,
+      "route_index": 15,
+      "distance_from_previous_capture_m": 19.302167901417704
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -164.05651168100158,
+        -195.25495665790208,
+        88.96556185349138
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 127.11482608612884,
+      "pitch_world_deg": -36.859253863099866,
+      "route_index": 16,
+      "distance_from_previous_capture_m": 17.91872813140258
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -180.2428958173585,
+        -197.87513030582934,
+        91.20898038215854
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 112.68386297278592,
+      "pitch_world_deg": -40.81559918227397,
+      "route_index": 17,
+      "distance_from_previous_capture_m": 16.549841934283425
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -195.15685338944073,
+        -195.98727990237384,
+        93.45239891082569
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 98.25289985944302,
+      "pitch_world_deg": -45.08748911025211,
+      "route_index": 18,
+      "distance_from_previous_capture_m": 15.199441973390448
+    },
+    {
+      "role": "elevated_oblique_scan_side3_2",
+      "capture_kind": "survey",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -207.66214263288055,
+        -190.41566103095477,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 83.82193674610009,
+      "pitch_world_deg": -49.66114028943489,
+      "flight_envelope_fraction": 0.7101571563397358,
+      "route_index": 19,
+      "distance_from_previous_capture_m": 13.872927686873162
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -221.4330673786883,
+        -189.5495834607881,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 67.50000000000003,
+      "pitch_world_deg": -48.11675480710403,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 20,
+      "distance_from_previous_capture_m": 13.798132435668457
+    },
+    {
+      "role": "elevated_oblique_scan_side3_1",
+      "capture_kind": "survey",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -240.3875291668084,
+        -191.11797910695662,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 51.17806325389992,
+      "pitch_world_deg": -42.26940994533868,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 21,
+      "distance_from_previous_capture_m": 19.019239905428027
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -249.58218062175504,
+        -173.62102071459822,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 32.05935441796662,
+      "pitch_world_deg": -44.65398148871936,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 22,
+      "distance_from_previous_capture_m": 19.76575746997503
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -256.61886633310417,
+        -156.63295863610222,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": 12.94064558203331,
+      "pitch_world_deg": -44.65398148871935,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 23,
+      "distance_from_previous_capture_m": 18.387745891847068
+    },
+    {
+      "role": "elevated_oblique_scan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -262.4894838680401,
+        -137.75914031228726,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -6.178063253899932,
+      "pitch_world_deg": -42.26940994533867,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 24,
+      "distance_from_previous_capture_m": 19.765757469974954
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -253.81075320838937,
+        -123.0491772153876,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -22.500000000000014,
+      "pitch_world_deg": -44.65398148871936,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 25,
+      "distance_from_previous_capture_m": 17.079326104238174
+    },
+    {
+      "role": "elevated_oblique_scan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -249.5460278530984,
+        -106.51087325703537,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -38.82193674610008,
+      "pitch_world_deg": -42.26940994533867,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 26,
+      "distance_from_previous_capture_m": 17.079326104238152
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -231.2395202445157,
+        -99.82291441934129,
+        93.23445178541502
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -57.241452559575066,
+      "pitch_world_deg": -44.6859215762836,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 27,
+      "distance_from_previous_capture_m": 19.6447279217825
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -215.11089249781074,
+        -95.53965614368278,
+        90.77308613133721
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -75.66096837305005,
+      "pitch_world_deg": -44.72106214242652,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 28,
+      "distance_from_previous_capture_m": 16.868232134128693
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -199.2682132054657,
+        -96.645015188037,
+        88.3117204772594
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -94.080484186525,
+      "pitch_world_deg": -44.75990957256589,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 29,
+      "distance_from_previous_capture_m": 16.070800436198173
+    },
+    {
+      "role": "overlap_anchor",
+      "capture_kind": "survey",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -183.87808103893155,
+        -98.883826104611,
+        85.85035482318156
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -112.49999999999999,
+      "pitch_world_deg": -42.417877628076226,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 30,
+      "distance_from_previous_capture_m": 15.745690308990406
+    },
+    {
+      "role": "elevated_oblique_scan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -196.18718905842903,
+        -84.40891855580368,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -96.17806325389994,
+      "pitch_world_deg": -42.26940994533869,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 31,
+      "distance_from_previous_capture_m": 21.400238851736198
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -181.47722596152937,
+        -93.0876492154544,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -112.50000000000001,
+      "pitch_world_deg": -44.65398148871936,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 32,
+      "distance_from_previous_capture_m": 17.079326104238167
+    },
+    {
+      "role": "elevated_oblique_scan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 22,
+      "position_world_xyz_m": [
+        -164.93892200317714,
+        -97.35237457074538,
+        95.69581743949286
+      ],
+      "look_at_world_xyz_m": [
+        -202.66322558499277,
+        -144.235176838851,
+        40.99880290443015
+      ],
+      "yaw_world_deg": -128.82193674610005,
+      "pitch_world_deg": -42.26940994533868,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 33,
+      "distance_from_previous_capture_m": 17.079326104238152
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -168.8212898315904,
+        -76.93028884137834,
+        81.43682404382528
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -42.21596869226795,
+      "pitch_world_deg": -37.1033291684626,
+      "route_index": 34,
+      "distance_from_previous_capture_m": 25.20819823292428
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -180.07933214522706,
+        -91.35402979612758,
+        85.22385374603103
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -22.505561857174683,
+      "pitch_world_deg": -38.694447626157675,
+      "route_index": 35,
+      "distance_from_previous_capture_m": 18.685005053002588
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -185.94926763036182,
+        -109.33623044422778,
+        89.01088344823677
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -2.795155022081462,
+      "pitch_world_deg": -40.12087619565433,
+      "route_index": 36,
+      "distance_from_previous_capture_m": 19.291378299996303
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -185.33407831588858,
+        -128.8615495574772,
+        92.79791315044253
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": 16.915251813011785,
+      "pitch_world_deg": -41.405403559809486,
+      "route_index": 37,
+      "distance_from_previous_capture_m": 19.8986969003564
+    },
+    {
+      "role": "elevated_oblique_scan_side3_2",
+      "capture_kind": "survey",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -177.88968189938709,
+        -147.59044078774966,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": 36.625658648105045,
+      "pitch_world_deg": -42.56708259786874,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 38,
+      "distance_from_previous_capture_m": 20.506876863305774
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -180.71352663170478,
+        -133.0292475830036,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": 22.500000000000018,
+      "pitch_world_deg": -44.95286001648633,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 39,
+      "distance_from_previous_capture_m": 14.832479449444076
+    },
+    {
+      "role": "elevated_oblique_scan_side3_1",
+      "capture_kind": "survey",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -189.01308532970845,
+        -120.73616936652037,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": 8.374341351894916,
+      "pitch_world_deg": -42.56708259786875,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 40,
+      "distance_from_previous_capture_m": 14.832479449444149
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -183.6448993352799,
+        -100.47727031280947,
+        96.58494285264825
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -12.20855288270169,
+      "pitch_world_deg": -44.95286001648632,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 41,
+      "distance_from_previous_capture_m": 20.958063167650476
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -176.15348328469724,
+        -82.39139208211336,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -32.79144711729832,
+      "pitch_world_deg": -44.95286001648632,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 42,
+      "distance_from_previous_capture_m": 19.57601353234347
+    },
+    {
+      "role": "elevated_oblique_scan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -165.62415910377558,
+        -64.27030646252956,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -53.37434135189494,
+      "pitch_world_deg": -42.56708259786875,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 43,
+      "distance_from_previous_capture_m": 20.958063167650494
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -151.0629658990295,
+        -61.44646173021183,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -67.50000000000001,
+      "pitch_world_deg": -44.95286001648633,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 44,
+      "distance_from_previous_capture_m": 14.832479449444111
+    },
+    {
+      "role": "elevated_oblique_scan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -138.7698876825463,
+        -53.146903032208186,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -81.62565864810507,
+      "pitch_world_deg": -42.56708259786875,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 45,
+      "distance_from_previous_capture_m": 14.832479449444103
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -120.46655337360232,
+        -60.575475649064245,
+        94.12357719857044
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -100.59424398607881,
+      "pitch_world_deg": -44.920642613654685,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 46,
+      "distance_from_previous_capture_m": 19.906131186946993
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -105.44079610701448,
+        -68.59498854034545,
+        91.66221154449264
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -119.56282932405256,
+      "pitch_world_deg": -44.88528072532651,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 47,
+      "distance_from_previous_capture_m": 17.208843346690003
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -94.45365771918233,
+        -80.56352213616043,
+        89.20084589041481
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -138.53141466202626,
+      "pitch_world_deg": -44.84629040160006,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 48,
+      "distance_from_previous_capture_m": 16.432325680517668
+    },
+    {
+      "role": "overlap_anchor",
+      "capture_kind": "survey",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -84.74550260473127,
+        -93.27799047688413,
+        86.73948023633699
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -157.50000000000003,
+      "pitch_world_deg": -42.41787762807624,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 49,
+      "distance_from_previous_capture_m": 16.185311297487655
+    },
+    {
+      "role": "elevated_oblique_scan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -82.30402477855549,
+        -76.53582925814102,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -143.3743413518949,
+      "pitch_world_deg": -42.56708259786875,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 50,
+      "distance_from_previous_capture_m": 19.575339342634056
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -79.48018004623775,
+        -91.0970224628871,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -157.5,
+      "pitch_world_deg": -44.95286001648632,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 51,
+      "distance_from_previous_capture_m": 14.832479449444113
+    },
+    {
+      "role": "elevated_oblique_scan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 10,
+      "position_world_xyz_m": [
+        -71.18062134823411,
+        -103.39010067937029,
+        96.58494285264827
+      ],
+      "look_at_world_xyz_m": [
+        -130.09685333897127,
+        -112.06313502294535,
+        41.88792831758556
+      ],
+      "yaw_world_deg": -171.62565864810506,
+      "pitch_world_deg": -42.56708259786875,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 52,
+      "distance_from_previous_capture_m": 14.832479449444097
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -34.20860733957177,
+        -101.26861646216663,
+        76.9375951522615
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 173.4176772521241,
+      "pitch_world_deg": -34.85971830134096,
+      "route_index": 53,
+      "distance_from_previous_capture_m": 41.92193682072027
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -38.12307239602184,
+        -118.30928153854485,
+        79.82286069441076
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 156.0732268415869,
+      "pitch_world_deg": -36.409423220940454,
+      "route_index": 54,
+      "distance_from_previous_capture_m": 17.720949753672315
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -47.05582419730892,
+        -133.58983287990765,
+        82.70812623656003
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 138.72877643104968,
+      "pitch_world_deg": -37.86425344409166,
+      "route_index": 55,
+      "distance_from_previous_capture_m": 17.933601458941144
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -60.30284481635802,
+        -145.6513740107396,
+        85.5933917787093
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 121.3843260205125,
+      "pitch_world_deg": -39.23094936013238,
+      "route_index": 56,
+      "distance_from_previous_capture_m": 18.146324338029913
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -76.74219665178067,
+        -153.2986016935784,
+        88.47865732085859
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 104.03987560997531,
+      "pitch_world_deg": -40.51586240280117,
+      "route_index": 57,
+      "distance_from_previous_capture_m": 18.35911591691453
+    },
+    {
+      "role": "elevated_oblique_scan_side3_2",
+      "capture_kind": "survey",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -94.92852640695804,
+        -155.7174578043368,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 86.69542519943809,
+      "pitch_world_deg": -41.72493709418618,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 58,
+      "distance_from_previous_capture_m": 18.571973834175967
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -112.93271192751882,
+        -146.64470350340832,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 67.5,
+      "pitch_world_deg": -44.10663184358568,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 59,
+      "distance_from_previous_capture_m": 20.16099121729352
+    },
+    {
+      "role": "elevated_oblique_scan_side3_1",
+      "capture_kind": "survey",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -132.07899968907395,
+        -140.3292279223051,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 48.30457480056192,
+      "pitch_world_deg": -41.72493709418617,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 60,
+      "distance_from_previous_capture_m": 20.160991217293525
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -139.5749491703121,
+        -123.72938110689446,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 31.10152493352061,
+      "pitch_world_deg": -44.10663184358568,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 61,
+      "distance_from_previous_capture_m": 18.213845637875963
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -146.01481067019915,
+        -108.18218013406278,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": 13.898475066479367,
+      "pitch_world_deg": -44.10663184358568,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 62,
+      "distance_from_previous_capture_m": 16.828169069371338
+    },
+    {
+      "role": "elevated_oblique_scan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -152.45223821041867,
+        -91.14387917461275,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -3.3045748005619147,
+      "pitch_world_deg": -41.72493709418617,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 63,
+      "distance_from_previous_capture_m": 18.21384563787594
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -143.37948390949018,
+        -73.13969365405197,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -22.500000000000004,
+      "pitch_world_deg": -44.106631843585674,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 64,
+      "distance_from_previous_capture_m": 20.16099121729353
+    },
+    {
+      "role": "elevated_oblique_scan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -137.06400832838693,
+        -53.993405892496845,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -41.6954251994381,
+      "pitch_world_deg": -41.724937094186174,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 65,
+      "distance_from_previous_capture_m": 20.160991217293528
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -118.63189656098406,
+        -48.634557522722886,
+        88.91004078917106
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -59.39656889957858,
+      "pitch_world_deg": -44.236294448404436,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 66,
+      "distance_from_previous_capture_m": 19.351525451203013
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -102.7264917048523,
+        -45.23950879260787,
+        86.45615871533428
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -77.09771259971906,
+      "pitch_world_deg": -44.37947926482646,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 67,
+      "distance_from_previous_capture_m": 16.447790026310923
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -87.39342739237217,
+        -46.90158916568576,
+        84.0022766414975
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -94.79885629985952,
+      "pitch_world_deg": -44.538415855304955,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 68,
+      "distance_from_previous_capture_m": 15.616878997082601
+    },
+    {
+      "role": "overlap_anchor",
+      "capture_kind": "survey",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -72.61844844776509,
+        -49.31746185350448,
+        81.54839456766072
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -112.5,
+      "pitch_world_deg": -42.33100953197346,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 69,
+      "distance_from_previous_capture_m": 15.170958469708783
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -80.24855401422982,
+        -41.468814612328316,
+        86.45615871533428
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -101.84228315817109,
+      "pitch_world_deg": -42.393251435917485,
+      "route_index": 70,
+      "distance_from_previous_capture_m": 11.99607950127909
+    },
+    {
+      "role": "elevated_oblique_scan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -87.87865958069457,
+        -33.62016737115216,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -93.30457480056192,
+      "pitch_world_deg": -41.724937094186174,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 71,
+      "distance_from_previous_capture_m": 11.996079501279095
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -69.87447406013382,
+        -42.692921672080644,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -112.5,
+      "pitch_world_deg": -44.10663184358568,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 72,
+      "distance_from_previous_capture_m": 20.160991217293507
+    },
+    {
+      "role": "elevated_oblique_scan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 11,
+      "position_world_xyz_m": [
+        -50.728186298578684,
+        -49.00839725318387,
+        91.36392286300784
+      ],
+      "look_at_world_xyz_m": [
+        -91.40359299382632,
+        -94.66881258774448,
+        36.833210111079396
+      ],
+      "yaw_world_deg": -131.6954251994381,
+      "pitch_world_deg": -41.724937094186174,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 73,
+      "distance_from_previous_capture_m": 20.16099121729354
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -107.68688694267662,
+        -25.545954198795613,
+        85.29835948154982
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -166.012540722934,
+      "pitch_world_deg": -46.746857869483506,
+      "route_index": 74,
+      "distance_from_previous_capture_m": 61.8996839432873
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -94.02332186807772,
+        -22.425863338171794,
+        96.46346154443907
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -166.36694987540352,
+      "pitch_world_deg": -44.392846702984684,
+      "route_index": 75,
+      "distance_from_previous_capture_m": 17.918914074270266
+    },
+    {
+      "role": "elevated_oblique_scan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -80.35975679347882,
+        -19.305772477547972,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -166.55149664640186,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 76,
+      "distance_from_previous_capture_m": 17.918914074270266
+    },
+    {
+      "role": "elevated_oblique_scan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -87.40113194899648,
+        -2.3063890793402955,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -148.44850335359814,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 77,
+      "distance_from_previous_capture_m": 18.400000000000002
+    },
+    {
+      "role": "overlap_anchor",
+      "capture_kind": "survey",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -91.88362391257412,
+        -14.121106286572587,
+        97.78310099101705
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -157.5,
+      "pitch_world_deg": -42.417877628076226,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 78,
+      "distance_from_previous_capture_m": 16.019157625155948
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -102.47903281382139,
+        -0.7926684386090415,
+        100.24446664509487
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -137.26287416160048,
+      "pitch_world_deg": -44.995230452972436,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 79,
+      "distance_from_previous_capture_m": 17.203728262639203
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -114.7514064581666,
+        11.171256701400452,
+        102.7058322991727
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -117.02574832320094,
+      "pitch_world_deg": -45.169485567192794,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 80,
+      "distance_from_previous_capture_m": 17.3148774325793
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -131.13070981539957,
+        18.372258209957067,
+        105.16719795325051
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -96.78862248480142,
+      "pitch_world_deg": -45.32823349998395,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 81,
+      "distance_from_previous_capture_m": 18.060850535829474
+    },
+    {
+      "role": "elevated_oblique_scan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -150.83545300189996,
+        23.968967020701484,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -76.55149664640189,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 82,
+      "distance_from_previous_capture_m": 20.631489874492143
+    },
+    {
+      "role": "elevated_oblique_scan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -167.83483640010766,
+        16.927591865183828,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -58.448503353598106,
+      "pitch_world_deg": -43.08619343469998,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 83,
+      "distance_from_previous_capture_m": 18.400000000000023
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -178.1608510151618,
+        2.015954136827091,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -40.47425167679906,
+      "pitch_world_deg": -45.47345393070368,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 84,
+      "distance_from_previous_capture_m": 18.137902788692625
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -186.9401035425878,
+        -12.317712324501542,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -22.5,
+      "pitch_world_deg": -45.47345393070368,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 85,
+      "distance_from_previous_capture_m": 16.808606996563785
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -190.86766730076738,
+        -28.66101407446525,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": -4.525748323200958,
+      "pitch_world_deg": -45.473453930703684,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 86,
+      "distance_from_previous_capture_m": 16.80860699656377
+    },
+    {
+      "role": "elevated_oblique_scan_side3_1",
+      "capture_kind": "survey",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -194.11019250014942,
+        -46.50672918771966,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": 13.44850335359812,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 87,
+      "distance_from_previous_capture_m": 18.137902788692642
+    },
+    {
+      "role": "elevated_oblique_scan_side3_2",
+      "capture_kind": "survey",
+      "entity_id": 23,
+      "position_world_xyz_m": [
+        -187.06881734463178,
+        -63.506112585927326,
+        107.62856360732833
+      ],
+      "look_at_world_xyz_m": [
+        -137.23497464681412,
+        -32.906250832633816,
+        52.931549072265625
+      ],
+      "yaw_world_deg": 31.55149664640186,
+      "pitch_world_deg": -43.08619343469998,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 88,
+      "distance_from_previous_capture_m": 18.399999999999988
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -192.59071964638034,
+        -42.746613159411254,
+        91.39596203420957
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -149.34749304171373,
+      "pitch_world_deg": -31.1415471039032,
+      "route_index": 89,
+      "distance_from_previous_capture_m": 26.92481337541998
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -186.1379846652319,
+        -55.61081099886906,
+        100.69262980020035
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -163.0808392580576,
+      "pitch_world_deg": -36.89745382967186,
+      "route_index": 90,
+      "distance_from_previous_capture_m": 17.133400314615297
+    },
+    {
+      "role": "elevated_oblique_scan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -182.89362099390388,
+        -69.80899814802146,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -176.81418547440148,
+      "pitch_world_deg": -41.791003920201845,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 91,
+      "distance_from_previous_capture_m": 17.278380870480934
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -191.98012704574273,
+        -51.66513405536027,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -157.50000000000003,
+      "pitch_world_deg": -44.17309403128079,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 92,
+      "distance_from_previous_capture_m": 20.29197862316694
+    },
+    {
+      "role": "elevated_oblique_scan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -198.38464633604272,
+        -32.41035467196456,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -138.18581452559854,
+      "pitch_world_deg": -41.79100392020185,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 93,
+      "distance_from_previous_capture_m": 20.291978623166965
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -198.51347977117626,
+        -43.41752829504301,
+        105.0665662580355
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -146.77273502105592,
+      "pitch_world_deg": -42.473596215501786,
+      "route_index": 94,
+      "distance_from_previous_capture_m": 12.058513704221516
+    },
+    {
+      "role": "overlap_anchor",
+      "capture_kind": "survey",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -198.64231320630978,
+        -54.42470191812146,
+        100.14383494987985
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -157.5,
+      "pitch_world_deg": -42.41787762807622,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 95,
+      "distance_from_previous_capture_m": 12.05851370422151
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -207.35770870111332,
+        -42.28133898015353,
+        102.60520060395766
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -139.8285463686004,
+      "pitch_world_deg": -44.61955386456259,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 96,
+      "distance_from_previous_capture_m": 15.148521477594073
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -216.99301607603888,
+        -30.26225235924646,
+        105.0665662580355
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -122.1570927372007,
+      "pitch_world_deg": -44.455190122108554,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 97,
+      "distance_from_previous_capture_m": 15.599868983207397
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -230.60768625478605,
+        -21.3965401317472,
+        107.52793191211333
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -104.48563910580108,
+      "pitch_world_deg": -44.307141011234286,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 98,
+      "distance_from_previous_capture_m": 16.43223716540055
+    },
+    {
+      "role": "elevated_oblique_scan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -247.39451225671104,
+        -12.109803517536804,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -86.81418547440147,
+      "pitch_world_deg": -41.79100392020186,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 99,
+      "distance_from_previous_capture_m": 19.341647423208162
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -260.8688648815367,
+        -32.46950748468085,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -67.50000000000003,
+      "pitch_world_deg": -51.12405449710457,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 100,
+      "distance_from_previous_capture_m": 24.41466207605354
+    },
+    {
+      "role": "elevated_oblique_scan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -267.1077310039042,
+        -47.371046878807455,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -48.1858145255985,
+      "pitch_world_deg": -57.63234534586686,
+      "flight_envelope_fraction": 0.5212060436091505,
+      "route_index": 101,
+      "distance_from_previous_capture_m": 16.15485458948894
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -270.3659057850049,
+        -62.28610622202613,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": -22.500000000000032,
+      "pitch_world_deg": -62.44098372977634,
+      "flight_envelope_fraction": 0.8957360653260473,
+      "route_index": 102,
+      "distance_from_previous_capture_m": 15.266784144538603
+    },
+    {
+      "role": "elevated_oblique_scan_side3_1",
+      "capture_kind": "survey",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -273.0157956083568,
+        -74.82522777741774,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": 3.1858145255985026,
+      "pitch_world_deg": -62.01295773044888,
+      "flight_envelope_fraction": 0.4369941467585855,
+      "route_index": 103,
+      "distance_from_previous_capture_m": 12.816063571034231
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -275.27984652676173,
+        -86.16900760627261,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": 22.499999999999982,
+      "pitch_world_deg": -58.23759426273979,
+      "flight_envelope_fraction": 0.8918207397151797,
+      "route_index": 104,
+      "distance_from_previous_capture_m": 11.567509125419564
+    },
+    {
+      "role": "elevated_oblique_scan_side3_2",
+      "capture_kind": "survey",
+      "entity_id": 1,
+      "position_world_xyz_m": [
+        -278.93106926932757,
+        -104.46306034204545,
+        109.98929756619114
+      ],
+      "look_at_world_xyz_m": [
+        -243.9936639405498,
+        -73.20984646418269,
+        55.292283031128434
+      ],
+      "yaw_world_deg": 41.81418547440149,
+      "pitch_world_deg": -49.402857068492416,
+      "flight_envelope_fraction": 0.7047381108094568,
+      "route_index": 105,
+      "distance_from_previous_capture_m": 18.654859769375584
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -235.4499767733353,
+        16.986238964640652,
+        82.33301439741922
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -69.61944245996223,
+      "pitch_world_deg": -62.82022151859908,
+      "route_index": 106,
+      "distance_from_previous_capture_m": 131.92955584493325
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -247.63186586463218,
+        12.649251381616718,
+        83.19506197952765
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -38.25984621499808,
+      "pitch_world_deg": -59.29442474044544,
+      "route_index": 107,
+      "distance_from_previous_capture_m": 12.95959139640524
+    },
+    {
+      "role": "missing_direction_rescan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -256.56719230568234,
+        0.7065702831498837,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -6.900249970033882,
+      "pitch_world_deg": -56.136590402801964,
+      "flight_envelope_fraction": 0.43962409485911513,
+      "route_index": 108,
+      "distance_from_previous_capture_m": 14.940241512827903
+    },
+    {
+      "role": "missing_direction_rescan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -253.04962493000488,
+        16.809060074773246,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -38.09975002996616,
+      "pitch_world_deg": -53.429616957820485,
+      "flight_envelope_fraction": 0.48601951106225655,
+      "route_index": 109,
+      "distance_from_previous_capture_m": 16.482216408352517
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -243.72163626014634,
+        29.31689061732666,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -64.04987501498312,
+      "pitch_world_deg": -50.14237672315881,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 110,
+      "distance_from_previous_capture_m": 15.603114993687683
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -228.12308105948625,
+        39.416231300634394,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -90.0,
+      "pitch_world_deg": -45.36809171224155,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 111,
+      "distance_from_previous_capture_m": 18.582561895108935
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -206.8312525283053,
+        41.01566615284097,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -115.95012498501694,
+      "pitch_world_deg": -41.26717512039208,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 112,
+      "distance_from_previous_capture_m": 21.351818518516506
+    },
+    {
+      "role": "within_entity_overlap_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -193.88508886398358,
+        37.638383250413256,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -130.2985999627395,
+      "pitch_world_deg": -38.88846383982535,
+      "route_index": 113,
+      "distance_from_previous_capture_m": 13.379431730325264
+    },
+    {
+      "role": "missing_direction_rescan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -180.93892519966187,
+        34.26110034798553,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -141.90024997003388,
+      "pitch_world_deg": -35.45471121472418,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 114,
+      "distance_from_previous_capture_m": 13.379431730325265
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -177.1596095194305,
+        18.374089791873608,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -157.49999999999997,
+      "pitch_world_deg": -37.740694268039015,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 115,
+      "distance_from_previous_capture_m": 16.330350009134968
+    },
+    {
+      "role": "missing_direction_rescan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 2,
+      "position_world_xyz_m": [
+        -168.59817636815774,
+        4.467897149128337,
+        84.05710956163608
+      ],
+      "look_at_world_xyz_m": [
+        -228.12308105948625,
+        -2.735671305632745,
+        41.36009502657338
+      ],
+      "yaw_world_deg": -173.09975002996612,
+      "pitch_world_deg": -35.45471121472418,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 116,
+      "distance_from_previous_capture_m": 16.33035000913498
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -114.83571984757805,
+        -48.22599132871893,
+        88.50996977736591
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -164.782724397244,
+      "pitch_world_deg": -40.54015842910453,
+      "route_index": 117,
+      "distance_from_previous_capture_m": 75.41137565476349
+    },
+    {
+      "role": "elevated_oblique_scan_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -102.70631284618906,
+        -46.79716940193893,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -166.55149664640186,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 118,
+      "distance_from_previous_capture_m": 19.370921671705492
+    },
+    {
+      "role": "elevated_oblique_scan_side1_2",
+      "capture_kind": "survey",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -109.74768800170672,
+        -29.79778600373125,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -148.44850335359814,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 119,
+      "distance_from_previous_capture_m": 18.400000000000006
+    },
+    {
+      "role": "overlap_anchor",
+      "capture_kind": "survey",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -114.23017996528436,
+        -41.61250321096354,
+        93.70008364177389
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -157.5,
+      "pitch_world_deg": -42.417877628076226,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 120,
+      "distance_from_previous_capture_m": 16.019157625155945
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -124.82558886653163,
+        -28.284065362999996,
+        96.16144929585171
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -137.26287416160048,
+      "pitch_world_deg": -44.995230452972436,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 121,
+      "distance_from_previous_capture_m": 17.2037282626392
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -137.09796251087684,
+        -16.320140222990503,
+        98.62281494992953
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -117.02574832320094,
+      "pitch_world_deg": -45.169485567192794,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 122,
+      "distance_from_previous_capture_m": 17.3148774325793
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -153.4772658681098,
+        -9.119138714433888,
+        101.08418060400734
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -96.78862248480142,
+      "pitch_world_deg": -45.32823349998395,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 123,
+      "distance_from_previous_capture_m": 18.060850535829474
+    },
+    {
+      "role": "elevated_oblique_scan_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -173.1820090546102,
+        -3.5224299036894706,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -76.55149664640189,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 124,
+      "distance_from_previous_capture_m": 20.631489874492143
+    },
+    {
+      "role": "elevated_oblique_scan_side2_2",
+      "capture_kind": "survey",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -190.1813924528179,
+        -10.563805059207127,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -58.448503353598106,
+      "pitch_world_deg": -43.08619343469998,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 125,
+      "distance_from_previous_capture_m": 18.400000000000023
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -200.50740706787204,
+        -25.475442787563864,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -40.47425167679906,
+      "pitch_world_deg": -45.47345393070368,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 126,
+      "distance_from_previous_capture_m": 18.137902788692625
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -209.28665959529803,
+        -39.8091092488925,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -22.5,
+      "pitch_world_deg": -45.47345393070368,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 127,
+      "distance_from_previous_capture_m": 16.808606996563785
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -213.21422335347762,
+        -56.15241099885621,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": -4.52574832320095,
+      "pitch_world_deg": -45.47345393070369,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 128,
+      "distance_from_previous_capture_m": 16.80860699656378
+    },
+    {
+      "role": "elevated_oblique_scan_side3_1",
+      "capture_kind": "survey",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -216.45674855285966,
+        -73.99812611211061,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": 13.44850335359812,
+      "pitch_world_deg": -43.086193434699986,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 129,
+      "distance_from_previous_capture_m": 18.137902788692635
+    },
+    {
+      "role": "elevated_oblique_scan_side3_2",
+      "capture_kind": "survey",
+      "entity_id": 26,
+      "position_world_xyz_m": [
+        -209.41537339734202,
+        -90.99750951031828,
+        103.54554625808517
+      ],
+      "look_at_world_xyz_m": [
+        -159.58153069952436,
+        -60.39764775702477,
+        48.84853172302246
+      ],
+      "yaw_world_deg": 31.55149664640186,
+      "pitch_world_deg": -43.08619343469998,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 130,
+      "distance_from_previous_capture_m": 18.399999999999988
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        246.8660629110043,
+        -57.617199861562064,
+        89.46300542962165
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -70.29821134655177,
+      "pitch_world_deg": -58.78213889998006,
+      "route_index": 131,
+      "distance_from_previous_capture_m": 457.71750255811685
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        237.06466474856222,
+        -49.07208735444553,
+        89.90088598323327
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -60.41516046323611,
+      "pitch_world_deg": -48.51698508504712,
+      "route_index": 132,
+      "distance_from_previous_capture_m": 13.010691491125037
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        224.25333548741108,
+        -43.49784135272036,
+        90.33876653684487
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -50.53210957992043,
+      "pitch_world_deg": -40.84724006074353,
+      "route_index": 133,
+      "distance_from_previous_capture_m": 13.978344512302156
+    },
+    {
+      "role": "diagnostic_cross_view_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        209.21111839907746,
+        -41.63959956445586,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -40.649058696604776,
+      "pitch_world_deg": -35.09007765623965,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 134,
+      "distance_from_previous_capture_m": 15.162885505583674
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        227.3100683473875,
+        -32.83981205379971,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -59.934772982319046,
+      "pitch_world_deg": -37.366969583151935,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 135,
+      "distance_from_previous_capture_m": 20.124816756038594
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        244.86399620110063,
+        -26.303762231878665,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -79.22048726803335,
+      "pitch_world_deg": -37.36696958315195,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 136,
+      "distance_from_previous_capture_m": 18.73126611759066
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        263.59157648773254,
+        -25.93218858405546,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -98.50620155374767,
+      "pitch_world_deg": -37.366969583151935,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 137,
+      "distance_from_previous_capture_m": 18.731266117590682
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        281.39095033314624,
+        -31.766794061652128,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -117.79191583946194,
+      "pitch_world_deg": -37.36696958315195,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 138,
+      "distance_from_previous_capture_m": 18.731266117590614
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        296.2644345717399,
+        -43.15274140793408,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -137.07763012517623,
+      "pitch_world_deg": -37.366969583151935,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 139,
+      "distance_from_previous_capture_m": 18.73126611759065
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        306.54272839915177,
+        -58.8121477301861,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -156.36334441089048,
+      "pitch_world_deg": -37.366969583151935,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 140,
+      "distance_from_previous_capture_m": 18.73126611759064
+    },
+    {
+      "role": "diagnostic_cross_view_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 29,
+      "position_world_xyz_m": [
+        315.9201789502304,
+        -76.61865414290521,
+        90.77664709045649
+      ],
+      "look_at_world_xyz_m": [
+        255.32124927196273,
+        -81.22929690787022,
+        48.07963255539379
+      ],
+      "yaw_world_deg": -175.64905869660475,
+      "pitch_world_deg": -35.09007765623964,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 141,
+      "distance_from_previous_capture_m": 20.12481675603861
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        264.51516351814564,
+        -48.50319005362948,
+        81.40146300549458
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": 170.06847357383396,
+      "pitch_world_deg": -26.44972313063234,
+      "route_index": 142,
+      "distance_from_previous_capture_m": 59.33674248857238
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        262.8268989836708,
+        -28.79689047432589,
+        83.71409619580898
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -172.83651898122503,
+      "pitch_world_deg": -28.80100352786973,
+      "route_index": 143,
+      "distance_from_previous_capture_m": 19.913230589750377
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        255.5965418571769,
+        -11.08363631657437,
+        86.02672938612336
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -155.74151153628398,
+      "pitch_world_deg": -31.203670201421616,
+      "route_index": 144,
+      "distance_from_previous_capture_m": 19.271370197956507
+    },
+    {
+      "role": "reconstruction_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        243.8310892169432,
+        3.174926074067841,
+        88.33936257643776
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -138.64650409134296,
+      "pitch_world_deg": -33.650723205046866,
+      "route_index": 145,
+      "distance_from_previous_capture_m": 18.630103315611596
+    },
+    {
+      "role": "diagnostic_cross_view_side1_1",
+      "capture_kind": "survey",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        228.89157044156534,
+        12.926048047399306,
+        90.65199576675215
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -121.5514966464019,
+      "pitch_world_deg": -36.134257969386766,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 146,
+      "distance_from_previous_capture_m": 17.9894934128674
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        209.72144331918415,
+        15.66452622961549,
+        90.65199576675217
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -102.2657823606876,
+      "pitch_world_deg": -38.43615775058015,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 147,
+      "distance_from_previous_capture_m": 19.364736937090804
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        191.71650785117464,
+        16.48934469616234,
+        90.65199576675215
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -82.98006807497333,
+      "pitch_world_deg": -38.436157750580136,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 148,
+      "distance_from_previous_capture_m": 18.023818316603823
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        174.44952913022814,
+        11.321223900328903,
+        90.65199576675215
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -63.694353789259026,
+      "pitch_world_deg": -38.436157750580136,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 149,
+      "distance_from_previous_capture_m": 18.023818316603872
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        159.8584378392563,
+        0.7401992973676883,
+        90.65199576675215
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -44.40863950354474,
+      "pitch_world_deg": -38.436157750580136,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 150,
+      "distance_from_previous_capture_m": 18.023818316603855
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        149.58084087909097,
+        -14.066185387434501,
+        90.65199576675215
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -25.12292521783045,
+      "pitch_world_deg": -38.43615775058013,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 151,
+      "distance_from_previous_capture_m": 18.023818316603858
+    },
+    {
+      "role": "within_entity_orbit_bridge",
+      "capture_kind": "bridge",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        144.77022727740678,
+        -31.436160156709082,
+        90.65199576675215
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": -5.837210932116164,
+      "pitch_world_deg": -38.43615775058013,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 152,
+      "distance_from_previous_capture_m": 18.02381831660385
+    },
+    {
+      "role": "diagnostic_cross_view_side2_1",
+      "capture_kind": "survey",
+      "entity_id": 28,
+      "position_world_xyz_m": [
+        141.4164908349365,
+        -50.50827300550418,
+        90.65199576675215
+      ],
+      "look_at_world_xyz_m": [
+        198.2917086882718,
+        -36.90779465041834,
+        47.95498123168945
+      ],
+      "yaw_world_deg": 13.44850335359812,
+      "pitch_world_deg": -36.134257969386766,
+      "flight_envelope_fraction": 0.92,
+      "route_index": 153,
+      "distance_from_previous_capture_m": 19.364736937090786
+    }
+  ]
+}
