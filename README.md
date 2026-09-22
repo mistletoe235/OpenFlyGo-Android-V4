@@ -27,6 +27,26 @@ handoff.
 The current public release intentionally excludes VLN, on-device model inference, remote inference,
 model distribution, and their native runtimes. Those features are planned for a later release.
 
+## Download and install
+
+- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/download/v0.3.1-v4/OpenFlyGo-Android-V4-0.3.1.apk)
+- [App release and checksums](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/tag/v0.3.1-v4)
+- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/preview-20260922)
+
+Version `0.3.1-v4`, versionCode `5`; arm64 Android 7.0 or later. This is the
+survey/capture source-release client, not the private model-inference build.
+Releases are currently private and require an authorized GitHub account.
+
+Download the APK and allow installation from your browser/file manager if Android
+prompts. Select this SDK line for compatible aircraft; `Mini 2` is the project
+reference, not a guarantee for every SDK-listed model. Preserve missions when
+updating and do not uninstall/clear data to bypass a signature conflict or downgrade.
+Use the included checksums and notices. Maintainer packages are signed with the
+project certificate; source builds still require your own keys and signing.
+Configure a phone-reachable workstation URL and access code for cloud features.
+Read the flight-safety warning above before any aircraft use; installation neither
+starts a mission nor establishes flight readiness.
+
 ## Client selection and aircraft support
 
 Reviewed September 21, 2026. **V4 and V5 are different DJI SDK product lines,

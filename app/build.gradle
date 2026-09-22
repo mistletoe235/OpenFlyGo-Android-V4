@@ -61,8 +61,8 @@ android {
         applicationId openFlyApplicationId
         minSdk 24
         targetSdk 33
-        versionCode 3
-        versionName '0.3.0-v4'
+        versionCode Integer.parseInt((project.findProperty('OPENFLY_VERSION_CODE') ?: '3').toString())
+        versionName (project.findProperty('OPENFLY_VERSION_NAME') ?: '0.3.0-v4').toString()
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resourceConfigurations += ['en', 'zh-rCN']
         manifestPlaceholders['API_KEY'] = aircraftApiKey
