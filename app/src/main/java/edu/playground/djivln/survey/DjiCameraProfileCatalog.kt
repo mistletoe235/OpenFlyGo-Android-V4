@@ -72,28 +72,35 @@ object DjiCameraProfileCatalog {
             .map(String::trim)
             .filter(String::isNotBlank)
             .filterNot { normalize(it) in SDK_SENTINEL_IDENTITIES }
-        val normalized = meaningfulIdentities.joinToString(" ") { normalize(it) }
-        val normalizedIdentities = meaningfulIdentities.map(::normalize)
-        if (normalizedIdentities.any(M30_ALIASES::contains)) {
-            return resolveM30(normalized, context)
+        val normalizedIdentities = meaningfulIdentities.map(::canonicalIdentity)
+        val matches = (entries + m30WideEntry).filter { entry ->
+            entry.aliases.any { canonicalIdentity(it) in normalizedIdentities }
         }
-        val match = entries.firstOrNull { entry -> entry.aliases.any(normalized::contains) }
-        return if (match != null) {
-            Resolution(
-                match.profile,
+        val match = matches.singleOrNull()
+        val source = meaningfulIdentities.map(::normalize)
+        val wrongLens = source.any { it in NON_SURVEY_LENSES }
+        val familyIdentities = when (match?.profile?.id) {
+            "dji-mavic-3e-wide-20mp", "dji-mavic-3t-wide-12mp", "dji-mavic-3m-rgb-20mp" -> setOf("MAVIC3ENTERPRISESERIES")
+            "dji-matrice-4e-wide-20mp", "dji-matrice-4t-wide-48mp" -> setOf("MATRICE4SERIES")
+            "dji-mavic-2-pro-photo-20mp", "dji-mavic-2-zoom-wide-photo-12mp" -> setOf("MAVIC2")
+            else -> emptySet()
+        }
+        val recognizedIdentities = match?.aliases?.map(::canonicalIdentity).orEmpty().toSet() +
+            familyIdentities + setOf("WIDE", "RGB", "DEFAULT")
+        val unknownIdentity = normalizedIdentities.any { it !in recognizedIdentities }
+        val needsWideLens = match?.profile?.id in MULTI_LENS_PROFILES
+        val lensConfirmed = !needsWideLens || "WIDECAMERA" in source ||
+            (match?.profile?.id == "dji-mavic-3m-rgb-20mp" && "RGBCAMERA" in source)
+        return if (match != null && !wrongLens && !unknownIdentity && lensConfirmed &&
+            match.profile.id != "dji-mavic-2-zoom-wide-photo-12mp") {
+            Resolution(match.profile,
                 context?.getString(match.displayNameRes) ?: match.defaultDisplayName,
-                match.officialSourceUrl,
-                true,
-            )
+                match.officialSourceUrl, true)
         } else {
-            Resolution(
-                CameraProfile.GENERIC_4_BY_3,
+            Resolution(CameraProfile.GENERIC_4_BY_3,
                 meaningfulIdentities.joinToString(" / ").ifBlank {
                     context?.getString(R.string.camera_unrecognized) ?: "Unrecognized camera"
-                },
-                null,
-                false,
-            )
+                }, match?.officialSourceUrl, false)
         }
     }
 
@@ -104,34 +111,6 @@ object DjiCameraProfileCatalog {
         context?.getString(m30WideEntry.displayNameRes) ?: m30WideEntry.defaultDisplayName,
         m30WideEntry.officialSourceUrl,
         true,
-    )
-
-    private fun resolveM30(normalized: String, context: Context?): Resolution = when {
-        normalized.contains("WIDECAMERA") -> Resolution(
-            m30WideEntry.profile,
-            context?.getString(m30WideEntry.displayNameRes) ?: m30WideEntry.defaultDisplayName,
-            m30WideEntry.officialSourceUrl,
-            true,
-        )
-        normalized.contains("ZOOMCAMERA") -> unverifiedM30(
-            context?.getString(R.string.camera_matrice_30_zoom_uncalibrated)
-                ?: "DJI Matrice 30 Series Zoom (variable focal length; calibration required)",
-        )
-        normalized.contains("INFRAREDCAMERA") || normalized.contains("THERMAL") -> unverifiedM30(
-            context?.getString(R.string.camera_matrice_30t_thermal_unverified)
-                ?: "DJI Matrice 30T Thermal (verify resolution mode)",
-        )
-        else -> unverifiedM30(
-            context?.getString(R.string.camera_matrice_30_lens_unverified)
-                ?: "DJI Matrice 30 Series (select and verify the lens)",
-        )
-    }
-
-    private fun unverifiedM30(label: String) = Resolution(
-        CameraProfile.GENERIC_4_BY_3,
-        label,
-        M30_SOURCE,
-        false,
     )
 
     private fun entry(
@@ -166,8 +145,33 @@ object DjiCameraProfileCatalog {
         "OTHER",
     )
 
-    private val M30_ALIASES = setOf(
-        "M30", "M30T", "M30SERIES", "DJIM30", "DJIM30T",
-        "MATRICE30", "MATRICE30SERIES", "DJIMATRICE30SERIES",
+    private fun canonicalIdentity(value: String): String {
+        val normalized = normalize(value).removePrefix("DJI").removeSuffix("CAMERA")
+        return when (normalized) {
+            "MATRICE30", "MATRICE30SERIES", "M30SERIES" -> "M30"
+            "MATRICE30T" -> "M30T"
+            "MATRICE4E" -> "M4E"
+            "MATRICE4T" -> "M4T"
+            "MAVIC3E" -> "M3E"
+            "MAVIC3T" -> "M3T"
+            "MAVIC3TA" -> "M3TA"
+            "MAVIC3M" -> "M3M"
+            "P4A" -> "PHANTOM4ADVANCED"
+            "P4P", "P4PV2" -> "PHANTOM4PRO"
+            "MAVICMINI2" -> "MINI2"
+            "MAVICMINISE" -> "MINISE"
+            "PHANTOM4PROFESSIONAL", "PHANTOM4PROV20", "PHANTOM4PROV2" -> "PHANTOM4PRO"
+            else -> normalized
+        }
+    }
+
+    private val NON_SURVEY_LENSES = setOf(
+        "ZOOMCAMERA", "INFRAREDCAMERA", "THERMAL", "NDVICAMERA", "VISIONCAMERA",
+        "MSGCAMERA", "MSRCAMERA", "MSRECAMERA", "MSNIRCAMERA", "POINTCLOUDCAMERA",
+    )
+    private val MULTI_LENS_PROFILES = setOf(
+        "dji-matrice-4e-wide-20mp", "dji-matrice-4t-wide-48mp",
+        "dji-mavic-3e-wide-20mp", "dji-mavic-3t-wide-12mp",
+        "dji-mavic-3m-rgb-20mp", "dji-matrice-30-wide-12mp",
     )
 }

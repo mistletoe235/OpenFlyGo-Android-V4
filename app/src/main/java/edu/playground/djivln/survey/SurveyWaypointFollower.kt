@@ -49,7 +49,9 @@ object SurveyWaypointFollower {
         val headingError = wrapDegrees(target.headingDegrees - pose.headingDegrees)
         val reached = horizontalError <= HORIZONTAL_TOLERANCE_METERS &&
             abs(verticalError) <= VERTICAL_TOLERANCE_METERS &&
-            abs(headingError) <= HEADING_TOLERANCE_DEGREES
+            abs(headingError) <= (if (target.captureAction == CaptureAction.START_DISTANCE_INTERVAL ||
+                target.captureAction == CaptureAction.CAPTURE_ON_REACH)
+                StoppedCapturePosePolicy.MAX_HEADING_ERROR_DEGREES else HEADING_TOLERANCE_DEGREES)
         if (reached) {
             return SurveyFollowerCommand(true, horizontalError, verticalError, 0.0, 0.0, 0.0, 0.0)
         }

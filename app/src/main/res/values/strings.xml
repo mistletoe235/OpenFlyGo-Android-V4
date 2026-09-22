@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="v86_continuous_recapture">请求连续补拍（实验，schema 14）</string>
+    <string name="v86_continuous_recapture_hint">V4 使用 App 速度控制：合适的内点移动拍照，转弯和端点仍停拍；相机或姿态异常会暂停。保持 App 前台。</string>
+    <string name="continuous_capture_window_missed">连续补拍已越过拍照窗口但未成功发起拍照，任务已暂停；请检查相机状态后恢复</string>
+    <string name="continuous_capture_pose_lost">连续补拍拍照确认期间姿态或遥测失效，任务已暂停</string>
     <string name="dji_account">DJI 账号</string>
     <string name="login_dji_account">登录 DJI 账号</string>
     <string name="relogin_dji_account">重新登录 DJI 账号</string>
@@ -26,7 +30,7 @@
     <string name="camera_matrice_30t_thermal_unverified">DJI Matrice 30T 热成像相机（需要确认分辨率模式）</string>
     <string name="camera_matrice_30_lens_unverified">DJI Matrice 30 系列（请选择并确认具体镜头）</string>
     <string name="current_camera_disconnected">当前相机未连接</string>
-    <string name="current_camera_not_calibrated">当前相机尚未校准</string>
+    <string name="current_camera_not_calibrated">相机参数未确认或与航线不符：请核对镜头、照片比例、分辨率和 1× 变焦</string>
     <string name="camera_aspect_mismatch">任务要求 %1$.2f:1 画幅，当前相机档案为 %2$.2f:1</string>
     <string name="camera_interval_too_slow">当前相机最短拍照间隔为 %1$.2f 秒，任务最快需要 %2$.2f 秒</string>
     <string name="mission_gimbal_pitch_out_of_range">任务云台俯仰 %1$.1f° 超出通用执行范围 -90° 至 30°</string>
@@ -1218,4 +1222,22 @@
     <string name="endurance_battery">，电量 %1$d%%</string>
     <string name="endurance_rth_needed">，返航所需 %1$d%%</string>
     <string name="endurance_landing_needed">，降落所需 %1$d%%</string>
+    <string name="survey_capture_pose_timeout">到点后机头或云台姿态长时间未稳定，航线已自动暂停</string>
+    <string name="v86_remote_open">打开已有云端会话</string>
+    <string name="v86_remote_upload">本机采集与上传重建</string>
+    <string name="v86_remote_endpoint">服务根地址（HTTP/HTTPS，不是 SSH）</string>
+    <string name="v86_remote_token">访问码</string>
+    <string name="v86_remote_session">已有会话 ID</string>
+    <string name="v86_remote_description">只读连接：查看点云、下载已审核航线。不上传照片，不启动云端任务，不执行飞行。HTTP 会明文传输访问码，请优先使用 HTTPS。</string>
+    <string name="v86_remote_refresh">连接 / 刷新结果</string>
+    <string name="v86_remote_cloud">下载并查看点云</string>
+    <string name="v86_remote_mission">下载并预览航线</string>
+    <string name="v86_remote_loading">正在读取云端…</string>
+    <string name="v86_remote_failed">云端操作失败：%1$s</string>
+    <string name="v86_remote_unapproved">航线未批准时仅可只读预览；相对高度测试仅可查看点云。</string>
+    <string name="v86_remote_preview_only">只读航线预览：不会载入执行任务或申请飞行控制权。北向上，无地形或障碍物信息。</string>
+    <string name="v86_remote_preview_stats">%1$d 个航点 · 相对起飞点高度 %2$s–%3$s m</string>
+    <string name="v86_remote_cloud_ready">点云已打开；不是实时避障地图。</string>
+    <string name="v86_remote_review">导入只载入航线，不会起飞或执行。请核对地图、坐标与高度，并重新完成飞行前检查。</string>
+    <string name="v86_remote_import">导入航线（不执行）</string>
 </resources>

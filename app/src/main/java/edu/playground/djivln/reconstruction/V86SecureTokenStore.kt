@@ -10,8 +10,8 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-class V86SecureTokenStore(context: Context) {
-    private val preferences = context.applicationContext.getSharedPreferences("v86_secure", Context.MODE_PRIVATE)
+class V86SecureTokenStore(context: Context, namespace: String = "v86_secure") {
+    private val preferences = context.applicationContext.getSharedPreferences(namespace, Context.MODE_PRIVATE)
 
     fun save(token: String) {
         if (token.isBlank()) return clear()

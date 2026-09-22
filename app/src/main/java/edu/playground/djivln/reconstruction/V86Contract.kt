@@ -3,7 +3,7 @@ package edu.playground.djivln.reconstruction
 import org.json.JSONArray
 import org.json.JSONObject
 
-data class V86SessionConfig(
+data class V86SessionConfig @JvmOverloads constructor(
     val name: String,
     val horizontalFovDegrees: Double,
     val takeoffAbsoluteAltitudeMeters: Double,
@@ -11,12 +11,15 @@ data class V86SessionConfig(
     val enableScal3r: Boolean = true,
     val autoPreview: Boolean = true,
     val maximumTasks: Int = 10,
+    val recaptureFlightMode: edu.playground.djivln.survey.RecaptureFlightMode = edu.playground.djivln.survey.RecaptureFlightMode.STOP_AND_CAPTURE,
 ) {
     fun toJson(): JSONObject = JSONObject()
         .put("name", name).put("horizontal_fov_deg", horizontalFovDegrees)
         .put("takeoff_absolute_altitude_m", takeoffAbsoluteAltitudeMeters)
         .put("camera_model", cameraModel).put("enable_scal3r", enableScal3r)
         .put("auto_preview", autoPreview).put("maximum_tasks", maximumTasks)
+        .put("supported_mission_schemas", JSONArray(listOf(13, 14)))
+        .put("recapture_flight_mode", recaptureFlightMode.name)
 }
 
 data class V86SessionState(
@@ -78,6 +81,7 @@ data class V86Result(
     val geometryKind: String?, val pointCloudUrl: String?, val viewerDataUrl: String?,
     val missionUrl: String?, val safeToExecute: Boolean, val detectorCounts: V86DetectorCounts,
     val error: String?, val missionError: String?,
+    val relativeHeightTest: Boolean = false,
 ) {
     companion object {
         fun decode(value: JSONObject): V86Result {
@@ -87,12 +91,14 @@ data class V86Result(
             val detectors = value.optJSONObject("detectors")
             val v50 = detectors?.optJSONObject("v50")
             val v78 = detectors?.optJSONObject("v78")
+            val relativeTest = value.optBoolean("test_only", false) ||
+                value.optJSONObject("contract")?.optString("altitude_mode") == "relative_height_test"
             return V86Result(
                 value.getString("session_id"), value.optString("phase", "unknown"),
                 value.optBoolean("completed", false), value.optString("message", ""),
                 value.optNullableString("geometry_kind"), pointCloud?.optNullableString("url"),
-                candidates?.optNullableString("url"), mission?.optNullableString("url"),
-                mission?.optBoolean("safe_to_execute", false) ?: false,
+                candidates?.optNullableString("url"), mission?.optNullableString("url").takeUnless { relativeTest },
+                !relativeTest && (mission?.optBoolean("safe_to_execute", false) ?: false),
                 V86DetectorCounts(
                     v50?.optInt("tier_a_geometry_gaps", 0) ?: 0,
                     v50?.optInt("tier_b_review", 0) ?: 0,
@@ -100,6 +106,7 @@ data class V86Result(
                     v78?.optInt("selected_after_union", 0) ?: 0,
                 ),
                 value.optNullableString("error"), value.optNullableString("mission_error"),
+                relativeTest,
             )
         }
     }

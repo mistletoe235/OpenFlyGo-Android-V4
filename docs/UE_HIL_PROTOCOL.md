@@ -6,14 +6,18 @@ camera. It does not define or transport model-inference requests.
 
 ## Transport
 
-- UDP `30020`: simulator pose/state from the host to Android;
-- UDP `30021`: bounded survey-control state from Android to the host;
-- TCP `30022`: length-delimited virtual-camera frames;
+- UDP `30020` on the UE host: HELLO, simulator POSE, heartbeat and PING from the phone;
+- UDP `30021` on the phone: heartbeat, PONG and safety events from the UE host;
+- TCP `30022`: framed virtual-camera images from UE to the phone, normally with the phone
+  listening and UE connecting; the client also retains the reverse connection-role fallback;
 - all numeric pose and velocity fields use SI units;
 - world vectors use ENU; body vectors use forward-right-up.
 
-The mobile client supports direct LAN addressing and Android-hotspot peer discovery. A session must
-lock to one peer and reject packets from another peer until the current session is explicitly reset.
+The mobile client supports direct LAN addressing and Android-hotspot peer discovery. A session
+locks one peer; timeout/reset invalidates the old peer and replay window before rediscovery.
+Peer/session checks are not cryptographic authentication. Keep HIL on a trusted LAN/VPN, never
+expose these ports publicly. The DJI simulator is the motion-state source, not the UE renderer.
+See [the phone-side quick start](HIL_QUICKSTART.md) for connection and safety checks.
 
 ## Lifecycle and safety
 

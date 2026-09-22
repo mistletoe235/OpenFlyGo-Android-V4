@@ -4,11 +4,14 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 object SurveyMissionJson {
-    const val SCHEMA_VERSION = 13
+    const val SCHEMA_VERSION = 14
 
     fun encode(mission: SurveyMission): String {
         val root = JSONObject()
-        root.put("schema_version", SCHEMA_VERSION)
+        root.put("schema_version", if (mission.recaptureFlightMode == RecaptureFlightMode.STOP_AND_CAPTURE) 13 else SCHEMA_VERSION)
+        if (mission.recaptureFlightMode != RecaptureFlightMode.STOP_AND_CAPTURE) {
+            root.put("recapture_flight_mode", mission.recaptureFlightMode.name)
+        }
         root.put("id", mission.id)
         root.put("name", mission.name)
         root.put("created_at_epoch_ms", mission.createdAtEpochMillis)
@@ -35,6 +38,9 @@ object SurveyMissionJson {
         }
         val schemaVersion = root.getInt("schema_version")
         require(schemaVersion in 1..SCHEMA_VERSION) { "unsupported mission schema" }
+        require(schemaVersion >= 14 || !root.has("recapture_flight_mode")) {
+            "recapture flight mode requires schema 14"
+        }
         val coordinateFrame = root.getString("coordinate_frame")
         require(coordinateFrame == "WGS84") { "only WGS84 missions are supported" }
         return SurveyMission(
@@ -55,6 +61,9 @@ object SurveyMissionJson {
             activeMapping = if (schemaVersion >= 11 && !root.isNull("active_mapping")) {
                 decodeActiveMapping(root.getJSONObject("active_mapping"))
             } else null,
+            recaptureFlightMode = if (schemaVersion >= 14) {
+                RecaptureFlightMode.valueOf(root.getString("recapture_flight_mode"))
+            } else RecaptureFlightMode.STOP_AND_CAPTURE,
         )
     }
 
@@ -90,6 +99,7 @@ object SurveyMissionJson {
         .put("priority", value.priority)
         .put("kind", value.kind)
         .put("risk_score", value.riskScore)
+        .put("reasons", JSONArray(value.reasons))
         .put("reason", JSONArray(value.reasons))
         .put("target_wgs84", value.targetWgs84?.let(::encodeActiveTarget) ?: JSONObject.NULL)
         .put("pass_indices", JSONArray(value.passIndices))
@@ -100,7 +110,9 @@ object SurveyMissionJson {
         priority = value.getInt("priority"),
         kind = value.getString("kind"),
         riskScore = value.getDouble("risk_score"),
-        reasons = decodeStringArray(value.optJSONArray("reason") ?: JSONArray()),
+        reasons = decodeStringArray(
+            value.optJSONArray("reasons") ?: value.optJSONArray("reason") ?: JSONArray(),
+        ),
         targetWgs84 = if (value.isNull("target_wgs84")) null else {
             decodeActiveTarget(value.getJSONObject("target_wgs84"))
         },
@@ -142,6 +154,8 @@ object SurveyMissionJson {
     private fun encodeTerrainPlan(value: SurveyTerrainPlan) = JSONObject()
         .put("source_name", value.sourceName)
         .put("source_sha256", value.sourceSha256)
+        .put("source_kind", value.sourceKind.name)
+        .put("bare_earth_base_sha256", value.bareEarthBaseSha256 ?: JSONObject.NULL)
         .put("epsg", value.epsg)
         .put("target_agl_m", value.targetAglMeters)
         .put("takeoff_terrain_elevation_m", value.takeoffTerrainElevationMeters)
@@ -161,6 +175,9 @@ object SurveyMissionJson {
     private fun decodeTerrainPlan(value: JSONObject) = SurveyTerrainPlan(
         sourceName = value.getString("source_name"),
         sourceSha256 = value.getString("source_sha256"),
+        sourceKind = SurveyTerrainSourceKind.valueOf(value.optString("source_kind", "SURFACE_DSM")),
+        bareEarthBaseSha256 = if (value.isNull("bare_earth_base_sha256")) null
+            else value.getString("bare_earth_base_sha256"),
         epsg = value.getInt("epsg"),
         targetAglMeters = value.getDouble("target_agl_m"),
         takeoffTerrainElevationMeters = value.getDouble("takeoff_terrain_elevation_m"),

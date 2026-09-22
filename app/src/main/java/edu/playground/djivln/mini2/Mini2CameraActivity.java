@@ -169,6 +169,8 @@ import edu.playground.djivln.survey.SurveyFollowerPose;
 import edu.playground.djivln.survey.SurveyWaypointFollower;
 import edu.playground.djivln.survey.SurveyExecutionWatchdog;
 import edu.playground.djivln.survey.SurveyGimbalSettlePolicy;
+import edu.playground.djivln.survey.StoppedCapturePosePolicy;
+import edu.playground.djivln.survey.ContinuousRecapturePolicy;
 import edu.playground.djivln.survey.SurveyFailsafeAction;
 import edu.playground.djivln.survey.SurveyFailsafeDecision;
 import edu.playground.djivln.survey.SurveyDistanceCaptureController;
@@ -343,12 +345,13 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     private String sdkState = "not registered";
     private DjiUserAccountController djiAccountController;
     private V86StreamingController v86Controller;
+    private edu.playground.djivln.reconstruction.V86RemoteSessionDialog v86RemoteBrowser;
     private String lastV86StatusLog = "";
     private int lastV86DownloadPercent = -1;
     private TextView djiAccountStatusText;
     private Button djiAccountLoginButton;
     private String lastDjiAccountLogState = "";
-    private ModelTransport modelTransport = ModelTransport.ETHERNET;
+    private ModelTransport modelTransport = ModelTransport.LOCAL;
     private Mini2OpenFlyRuntime localOpenFlyRuntime;
     private AoaUsbProbe aoaUsbProbe;
     private Mini2AircraftBridge aircraftBridge;
@@ -493,6 +496,10 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     private long surveyGimbalCommandGeneration;
     private int surveyGimbalCommandAttempts;
     private boolean surveyGimbalLimitActive;
+    private int surveyCapturePoseWaypointIndex = -1;
+    private long surveyCapturePoseStableSinceElapsedMs;
+    private long surveyCapturePoseVerificationStartedElapsedMs;
+    private boolean surveyCapturePoseTimeoutHandled;
     private SurveyWaypoint surveyPendingCaptureStart;
     private boolean surveyPhotoInFlight;
     private long surveyPhotoRequestGeneration;
@@ -1033,18 +1040,11 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         renderStopThresholdButton(stopThresholdButton);
 
         ethernetEndpoint.setText(ModelEndpoint.DEFAULT_ETHERNET_BASE);
-        localTransportButton.setVisibility(View.GONE);
-        usbTransportButton.setVisibility(View.GONE);
-        ethernetTransportButton.setVisibility(View.GONE);
-        findViewById(R.id.import_model).setVisibility(View.GONE);
-        cloudModelButton.setVisibility(View.GONE);
-        stopThresholdButton.setVisibility(View.GONE);
-        findViewById(R.id.model_health).setVisibility(View.GONE);
-        findViewById(R.id.model_load).setVisibility(View.GONE);
-        findViewById(R.id.model_preflight).setVisibility(View.GONE);
-        findViewById(R.id.model_start).setVisibility(View.GONE);
-        findViewById(R.id.model_stop).setVisibility(View.GONE);
-        findViewById(R.id.model_reset).setVisibility(View.GONE);
+        localTransportButton.setOnClickListener(v -> selectModelTransport(ModelTransport.LOCAL));
+        usbTransportButton.setOnClickListener(v -> selectModelTransport(ModelTransport.USB));
+        ethernetTransportButton.setOnClickListener(v -> selectModelTransport(ModelTransport.ETHERNET));
+        findViewById(R.id.import_model).setOnClickListener(v -> chooseModelPack());
+        cloudModelButton.setOnClickListener(v -> downloadLatestCloudModel());
         stopThresholdButton.setOnClickListener(v -> {
             if (controlArmed || autoInferenceEnabled || inferenceInFlight) {
                 normalStop(getString(R.string.reason_adjust_uavflow_stop_threshold));
@@ -3885,6 +3885,41 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void showV86Dialog() {
+        new AlertDialog.Builder(this)
+                .setItems(new String[]{getString(R.string.v86_remote_open), getString(R.string.v86_remote_upload)},
+                        (dialog, which) -> {
+                            if (which == 0) {
+                                if (v86RemoteBrowser == null) {
+                                    v86RemoteBrowser = new edu.playground.djivln.reconstruction.V86RemoteSessionDialog(
+                                            this, this::reviewRemoteV86Mission);
+                                }
+                                v86RemoteBrowser.show();
+                            } else showV86UploadDialog();
+                        }).show();
+    }
+
+    private void reviewRemoteV86Mission(String raw) {
+        if (rejectSurveyEditingIfLocked()) return;
+        try {
+            SurveyMission imported = SurveyMissionJson.INSTANCE.decode(raw);
+            if (imported.getActiveMapping() != null) {
+                edu.playground.djivln.survey.ActiveRecaptureMissionValidator.validate(imported);
+            }
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.v86_remote_mission)
+                    .setMessage(imported.getName() + "\n" + getString(R.string.v86_remote_review))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.v86_remote_import, (dialog, which) -> {
+                        if (isFinishing() || isDestroyed() || rejectSurveyEditingIfLocked()) return;
+                        activateSurveyMission(imported, getString(R.string.imported));
+                        saveSurveyMissionVersion(false);
+                    }).show();
+        } catch (Exception error) {
+            showBanner(getString(R.string.v86_action_failed, error.getMessage()));
+        }
+    }
+
+    private void showV86UploadDialog() {
         if (v86Controller == null) return;
         if (v86Controller.current().getSessionId() == null) showV86CreateDialog();
         else showV86ActionsDialog();
@@ -3919,11 +3954,19 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         TextView warning = new TextView(this);
         warning.setText(R.string.v86_insecure_http_warning);
         warning.setTextColor(0xFFC62828);
+        android.widget.CheckBox continuousRecapture = new android.widget.CheckBox(this);
+        continuousRecapture.setText(R.string.v86_continuous_recapture);
+        TextView continuousHint = new TextView(this);
+        continuousHint.setText(R.string.v86_continuous_recapture_hint);
+        continuousHint.setTextSize(12);
         content.addView(endpoint); content.addView(token); content.addView(name); content.addView(asl);
+        content.addView(continuousRecapture); content.addView(continuousHint);
         content.addView(warning);
+        android.widget.ScrollView scroll = new android.widget.ScrollView(this);
+        scroll.addView(content);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.v86_cloud_reconstruction)
-                .setView(content)
+                .setView(scroll)
                 .setNegativeButton(R.string.action_cancel, null)
                 .setNeutralButton(R.string.v86_save_connection, null)
                 .setPositiveButton(R.string.v86_create_session, null)
@@ -3949,7 +3992,9 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                             name.getText().toString().trim(),
                             camera.getHorizontalFieldOfViewDegrees(), takeoffAsl,
                             aircraftBridge == null ? "DJI" : aircraftBridge.currentSurveyCameraProfileLabel(),
-                            true, true, 10);
+                            true, true, 10, continuousRecapture.isChecked()
+                                    ? edu.playground.djivln.survey.RecaptureFlightMode.CONTINUOUS_EXPERIMENTAL
+                                    : edu.playground.djivln.survey.RecaptureFlightMode.STOP_AND_CAPTURE);
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                     v86Controller.createSessionJava(config, (session, createError) -> {
                         if (createError == null && session != null) {
@@ -4056,12 +4101,14 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void importV86Mission() {
+        if (rejectSurveyEditingIfLocked()) return;
         V86Result cloudResult = v86Controller.current().getResult();
         if (cloudResult != null && !cloudResult.getSafeToExecute()) {
             showBanner(getString(R.string.v86_imported_mission_safe_false));
             return;
         }
         v86Controller.downloadMissionJava((value, downloadError) -> {
+            if (isFinishing() || isDestroyed() || rejectSurveyEditingIfLocked()) return;
             if (downloadError != null || value == null) {
                 showBanner(getString(R.string.v86_action_failed, downloadError));
                 return;
@@ -5293,9 +5340,25 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 snapshot.getMaxFlightRadiusMeters(), snapshot.getMaxFlightRadiusEnabled(),
                 snapshot.getHorizontalSpeed(), snapshot.getVerticalSpeed(),
                 snapshot.getGoingHome(), snapshot.getLanding());
-        return SurveySimulatorGate.INSTANCE.evaluate(
+        SurveyExecutionGateResult result = SurveySimulatorGate.INSTANCE.evaluate(
                 surveyMission, telemetry, System.currentTimeMillis(), requireVirtualStick,
                 allowNotFlying, allowNotFlying, environment, checkPreflightReadiness);
+        boolean virtualCamera = hilVirtualFramesEnabled && snapshot.getSimulatorActive();
+        if (!virtualCamera && surveyMission != null) {
+            DjiCameraProfileCatalog.Resolution camera = aircraftBridge == null
+                    ? null : aircraftBridge.currentSurveyCameraResolution();
+            if (camera == null || !camera.getVerifiedProfile()
+                    || !(surveyMission.getActiveMapping() == null
+                        ? edu.playground.djivln.survey.SurveyCameraModePolicy.INSTANCE.sameGeometry(
+                            surveyMission.getCameraProfile(), camera.getProfile())
+                        : edu.playground.djivln.survey.SurveyCameraModePolicy.INSTANCE.compatibleRecapture(
+                            surveyMission.getCameraProfile(), camera.getProfile()))) {
+                java.util.Set<SurveyExecutionBlock> blocks = new java.util.LinkedHashSet<>(result.getBlocks());
+                blocks.add(SurveyExecutionBlock.CAMERA_GEOMETRY_UNVERIFIED);
+                return new SurveyExecutionGateResult(false, blocks, result.getStartDistanceMeters());
+            }
+        }
+        return result;
     }
 
     private String surveyBlockLabel(SurveyExecutionBlock block) {
@@ -5314,6 +5377,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             case UNSUPPORTED_COORDINATE_FRAME: return getString(R.string.gate_coordinate_frame_invalid);
             case MISSION_TOO_LONG: return getString(R.string.gate_mission_too_long);
             case MISSION_ALTITUDE_UNSAFE: return getString(R.string.gate_mission_altitude_unsafe);
+            case CAMERA_GEOMETRY_UNVERIFIED: return getString(R.string.current_camera_not_calibrated);
             case CAMERA_TRIGGER_UNSAFE: return getString(R.string.gate_camera_trigger_unsafe);
             case AIRCRAFT_BATTERY_LOW: return getString(R.string.gate_aircraft_battery_low);
             case RC_BATTERY_LOW: return getString(R.string.gate_rc_battery_low);
@@ -5409,6 +5473,10 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             surveyGimbalCommandGeneration++;
             surveyGimbalCommandAttempts = 0;
             surveyGimbalLimitActive = false;
+            surveyCapturePoseWaypointIndex = -1;
+            surveyCapturePoseStableSinceElapsedMs = 0L;
+            surveyCapturePoseVerificationStartedElapsedMs = 0L;
+            surveyCapturePoseTimeoutHandled = false;
             surveyPendingCaptureStart = null;
             surveyPointCapturePendingLegIndex = -1;
             surveyPointCaptureCompletedLegIndex = -1;
@@ -5569,9 +5637,13 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         if (resuming) {
             surveyGimbalCommandedPitch = Double.NaN;
             surveyGimbalCommandAcceptedElapsedMs = 0L;
-            surveyGimbalVerificationStartedElapsedMs = 0L;
-            surveyGimbalLastCommandElapsedMs = 0L;
-            surveyGimbalCommandGeneration++;
+        surveyGimbalVerificationStartedElapsedMs = 0L;
+        surveyGimbalLastCommandElapsedMs = 0L;
+        surveyGimbalCommandGeneration++;
+        surveyCapturePoseWaypointIndex = -1;
+        surveyCapturePoseStableSinceElapsedMs = 0L;
+        surveyCapturePoseVerificationStartedElapsedMs = 0L;
+        surveyCapturePoseTimeoutHandled = false;
         }
         setSurveyWaypointDeadline(executionStatus.getWaypointIndex());
         surveyControlStartedElapsedMs = SystemClock.elapsedRealtime();
@@ -5585,6 +5657,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         mainHandler.post(surveySimulatorControlRunnable);
         appendLog("SURVEY execution RUNNING waypoint=" + (executionStatus.getWaypointIndex() + 1)
                 + "/" + surveyMission.getWaypoints().size());
+        appendLog("SURVEY recapture flight mode=" + surveyMission.getRecaptureFlightMode().name());
         publishSurveyTargetToUe();
         persistSurveyCheckpoint(executionStatus);
         renderSurveySimulatorExecutionStatus(executionStatus, null);
@@ -5686,6 +5759,28 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                     aircraftSnapshot.getGimbalMode(),
                     surveyGimbalCommandAttempts));
         }
+        GeoPoint capturePosePoint = new GeoPoint(
+                aircraftSnapshot.getLatitude(), aircraftSnapshot.getLongitude(),
+                aircraftSnapshot.getAltitude());
+        if (runContinuousSurveyCaptureTick(target, waypointIndex, executionLegIndex,
+                capturePosePoint, gimbalVerifiedForCapture, nowElapsedMs)) return;
+        if (surveyCapturePoseWaypointIndex != executionLegIndex) {
+            surveyCapturePoseWaypointIndex = executionLegIndex;
+            surveyCapturePoseStableSinceElapsedMs = 0L;
+            surveyCapturePoseVerificationStartedElapsedMs = 0L;
+            surveyCapturePoseTimeoutHandled = false;
+        }
+        boolean poseAligned = gimbalVerifiedForCapture &&
+                StoppedCapturePosePolicy.INSTANCE.aligned(
+                        aircraftSnapshot.getConnected(), aircraftSnapshot.getHeading(),
+                        actualGimbalPitch, aircraftSnapshot.getAltitude(), capturePosePoint,
+                        target, aircraftSnapshot.getHorizontalSpeed(), System.currentTimeMillis(),
+                        aircraftSnapshot.getFlightStateUpdatedAtMs(),
+                        aircraftSnapshot.getGimbalStateUpdatedAtMs());
+        surveyCapturePoseStableSinceElapsedMs = StoppedCapturePosePolicy.INSTANCE.updateStableSince(
+                poseAligned, surveyCapturePoseStableSinceElapsedMs, nowElapsedMs);
+        boolean capturePoseReady = StoppedCapturePosePolicy.INSTANCE.stable(
+                surveyCapturePoseStableSinceElapsedMs, nowElapsedMs);
         double maximumSpeed = surveyHorizontalSpeedLimit();
         double maximumVerticalSpeed = surveyVerticalSpeedLimit();
         SurveyFollowerCommand command = SurveyWaypointFollower.INSTANCE.command(
@@ -5708,9 +5803,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                     command.getHorizontalErrorMeters()), true);
             return;
         }
-        GeoPoint currentPoint = new GeoPoint(
-                aircraftSnapshot.getLatitude(), aircraftSnapshot.getLongitude(),
-                aircraftSnapshot.getAltitude());
+        GeoPoint currentPoint = capturePosePoint;
         if (surveyPendingCaptureStart != null && gimbalVerifiedForCapture && !surveyPhotoInFlight) {
             SurveyWaypoint pendingStart = surveyPendingCaptureStart;
             surveyPendingCaptureStart = null;
@@ -5744,6 +5837,20 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 scheduleNextSurveyControlTick();
                 return;
             }
+            if ((startsCapture || target.getCaptureAction()
+                    == edu.playground.djivln.survey.CaptureAction.CAPTURE_ON_REACH)
+                    && !deferNadirCaptureStart && !capturePoseReady) {
+                if (surveyCapturePoseVerificationStartedElapsedMs == 0L) {
+                    surveyCapturePoseVerificationStartedElapsedMs = nowElapsedMs;
+                }
+                if (nowElapsedMs - surveyCapturePoseVerificationStartedElapsedMs >= SurveyGimbalSettlePolicy.TIMEOUT_MS) {
+                    pauseSurveyForRecoverableFault(getString(R.string.survey_capture_pose_timeout), true);
+                    return;
+                }
+                renderSurveySimulatorExecutionStatus(executionStatus, command);
+                scheduleNextSurveyControlTick();
+                return;
+            }
             if (stopsCapture && surveyPendingCaptureStart != null) {
                 aircraftBridge.sendBodyVelocity(0f, 0f, 0f, 0f);
                 surveyPendingCaptureStart = null;
@@ -5769,7 +5876,8 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                     != edu.playground.djivln.survey.CaptureAction.CAPTURE_ON_REACH
                     || surveyPointCaptureCompletedLegIndex != executionLegIndex) {
                 boolean photoTriggered = surveyCaptureController.onWaypointReached(
-                        target, currentPoint, SystemClock.elapsedRealtime(), !surveyPhotoInFlight);
+                        target, currentPoint, SystemClock.elapsedRealtime(),
+                        !surveyPhotoInFlight);
                 if (photoTriggered) {
                     if (target.getCaptureAction()
                             == edu.playground.djivln.survey.CaptureAction.CAPTURE_ON_REACH) {
@@ -5792,22 +5900,8 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 scheduleNextSurveyControlTick();
                 return;
             }
-            SurveyExecutionPhase reachedPhase = surveySimulatorExecution.getCurrentPhase();
-            long reachedAtElapsedMs = SystemClock.elapsedRealtime();
-            executionStatus = surveySimulatorExecution.reachWaypoint();
-            publishSurveyTargetToUe();
-            renderSurveyExecutionOverlay(true);
-            persistSurveyCheckpoint(executionStatus);
-            appendLog(String.format(Locale.US,
-                    "SURVEY leg reached %d/%d phase=%s elapsed=%.1fs h_err=%.2fm v_err=%+.2fm",
-                    executionLegIndex + 1, surveySimulatorExecution.getExecutionLegCount(),
-                    reachedPhase, Math.max(0L, reachedAtElapsedMs - surveyLegStartedElapsedMs) / 1000.0,
-                    command.getHorizontalErrorMeters(), command.getVerticalErrorMeters()));
-            if (executionStatus.getState() == SurveyExecutionState.COMPLETED) {
-                completeSurveySimulatorExecution();
-                return;
-            }
-            setSurveyWaypointDeadline(executionStatus.getWaypointIndex());
+            if (!advanceSurveyWaypoint(command, executionLegIndex)) return;
+            executionStatus = surveySimulatorExecution.getStatus();
             renderSurveySimulatorExecutionStatus(executionStatus, null);
             scheduleNextSurveyControlTick();
             return;
@@ -5824,6 +5918,74 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             renderSurveySimulatorExecutionStatus(executionStatus, command);
         }
         scheduleNextSurveyControlTick();
+    }
+
+    private boolean advanceSurveyWaypoint(SurveyFollowerCommand command, int executionLegIndex) {
+        SurveyExecutionPhase reachedPhase = surveySimulatorExecution.getCurrentPhase();
+        long reachedAtElapsedMs = SystemClock.elapsedRealtime();
+        SurveyExecutionStatus executionStatus = surveySimulatorExecution.reachWaypoint();
+        publishSurveyTargetToUe();
+        renderSurveyExecutionOverlay(true);
+        persistSurveyCheckpoint(executionStatus);
+        appendLog(String.format(Locale.US,
+                "SURVEY leg reached %d/%d phase=%s elapsed=%.1fs h_err=%.2fm v_err=%+.2fm",
+                executionLegIndex + 1, surveySimulatorExecution.getExecutionLegCount(),
+                reachedPhase, Math.max(0L, reachedAtElapsedMs - surveyLegStartedElapsedMs) / 1000.0,
+                command.getHorizontalErrorMeters(), command.getVerticalErrorMeters()));
+        if (executionStatus.getState() == SurveyExecutionState.COMPLETED) {
+            completeSurveySimulatorExecution();
+            return false;
+        }
+        setSurveyWaypointDeadline(executionStatus.getWaypointIndex());
+        return true;
+    }
+
+    private boolean runContinuousSurveyCaptureTick(
+            SurveyWaypoint target, int waypointIndex, int executionLegIndex,
+            GeoPoint position, boolean gimbalVerified, long nowElapsedMs) {
+        if (surveySimulatorExecution.getCurrentPhase() != SurveyExecutionPhase.SURVEY
+                || target.getCaptureAction() != edu.playground.djivln.survey.CaptureAction.CAPTURE_ON_REACH
+                || !ContinuousRecapturePolicy.INSTANCE.eligible(surveyMission, waypointIndex)) return false;
+        SurveyFollowerPose pose = new SurveyFollowerPose(position.getLatitude(), position.getLongitude(),
+                position.getAltitudeMeters(), aircraftSnapshot.getHeading());
+        boolean pending = surveyPointCapturePendingLegIndex == executionLegIndex;
+        boolean completed = surveyPointCaptureCompletedLegIndex == executionLegIndex;
+        if (!pending && !completed && ContinuousRecapturePolicy.INSTANCE.missedWindow(surveyMission, waypointIndex, pose)) {
+            pauseSurveyForRecoverableFault(getString(R.string.continuous_capture_window_missed), true);
+            return true;
+        }
+        boolean aligned = gimbalVerified && ContinuousRecapturePolicy.INSTANCE.poseReady(
+                aircraftSnapshot.getConnected(), pose, target, aircraftSnapshot.getGimbalPitch(),
+                System.currentTimeMillis(), aircraftSnapshot.getFlightStateUpdatedAtMs(),
+                aircraftSnapshot.getGimbalStateUpdatedAtMs());
+        if (!aligned) {
+            if (!pending && !completed) return false;
+            pauseSurveyForRecoverableFault(getString(R.string.continuous_capture_pose_lost), true);
+            return true;
+        }
+        SurveyFollowerCommand command = ContinuousRecapturePolicy.INSTANCE.command(
+                surveyMission, waypointIndex, pose, surveyHorizontalSpeedLimit(), surveyVerticalSpeedLimit());
+        if (!pending && !completed && command.getReached()) {
+            if (surveyCaptureController.onWaypointReached(target, position, nowElapsedMs, !surveyPhotoInFlight)) {
+                surveyPointCapturePendingLegIndex = executionLegIndex;
+                appendLog("SURVEY continuous capture requested leg=" + executionLegIndex);
+                triggerSurveyPhoto("CONTINUOUS_CAPTURE_ON_REACH");
+            }
+        }
+        if (surveySimulatorExecution.getStatus().getState() != SurveyExecutionState.RUNNING) return true;
+        if (surveyPointCaptureCompletedLegIndex == executionLegIndex) {
+            appendLog("SURVEY continuous capture confirmed leg=" + executionLegIndex);
+            if (!advanceSurveyWaypoint(command, executionLegIndex)) return true;
+        }
+        aircraftBridge.sendBodyVelocity((float) command.getForwardMetersPerSecond(),
+                (float) command.getRightMetersPerSecond(), (float) command.getUpMetersPerSecond(),
+                (float) command.getYawRateDegreesPerSecond());
+        if (nowElapsedMs - lastSurveyExecutionRenderElapsedMs >= 500L) {
+            lastSurveyExecutionRenderElapsedMs = nowElapsedMs;
+            renderSurveySimulatorExecutionStatus(surveySimulatorExecution.getStatus(), command);
+        }
+        scheduleNextSurveyControlTick();
+        return true;
     }
 
     private void issueSurveyGimbalCommand(double targetPitchDegrees) {
@@ -6160,9 +6322,10 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                     reason, triggeredAtNanos, triggeredAtEpochMillis);
             surveyTriggerFrameId = triggerFrameId[0];
         }, (ok, message) -> {
-            runOnUiThread(() -> completeTriggerAlignedFrameCapture(
-                    triggerFrameId[0], ok, message));
-            finishSurveyPhotoRequest(requestGeneration, ok, message);
+            runOnUiThread(() -> {
+                completeTriggerAlignedFrameCapture(triggerFrameId[0], ok, message);
+                finishSurveyPhotoRequest(requestGeneration, ok, message);
+            });
         });
     }
 
@@ -6198,7 +6361,11 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 -snapshot.getVerticalSpeed(),
                 mission == null ? null : mission.getId(),
                 execution == null ? null : execution.getExecutionLegIndex(),
-                execution == null ? null : execution.getStatus().getWaypointIndex());
+                execution == null ? null : execution.getStatus().getWaypointIndex(),
+                snapshot.getAircraftRoll(), snapshot.getAircraftYaw(),
+                snapshot.getGimbalRoll(), snapshot.getGimbalYaw(),
+                snapshot.getGimbalYawRelativeToAircraftHeading(),
+                snapshot.getGimbalStateUpdatedAtMs());
         PendingTriggerFrame pending = new PendingTriggerFrame(
                 id, metadata, baselineVideoSequence, triggeredAtElapsedNanos);
         pendingTriggerFrames.put(id, pending);
@@ -6238,7 +6405,11 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 frameSnapshot.getVelocityNorth(), frameSnapshot.getVelocityEast(),
                 -frameSnapshot.getVerticalSpeed(),
                 pending.metadata.getMissionId(), pending.metadata.getExecutionLegIndex(),
-                pending.metadata.getWaypointIndex());
+                pending.metadata.getWaypointIndex(),
+                frameSnapshot.getAircraftRoll(), frameSnapshot.getAircraftYaw(),
+                frameSnapshot.getGimbalRoll(), frameSnapshot.getGimbalYaw(),
+                frameSnapshot.getGimbalYawRelativeToAircraftHeading(),
+                frameSnapshot.getGimbalStateUpdatedAtMs());
         pending.bitmapRequested = true;
         codec.getBitmap(bitmap -> runOnUiThread(() -> {
             PendingTriggerFrame current = pendingTriggerFrames.get(id);
@@ -11657,6 +11828,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     @Override protected void onDestroy() {
+        if (v86RemoteBrowser != null) v86RemoteBrowser.close();
         if (!mainUiInitialized) {
             super.onDestroy();
             return;

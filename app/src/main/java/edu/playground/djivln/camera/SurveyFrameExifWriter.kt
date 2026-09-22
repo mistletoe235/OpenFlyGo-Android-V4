@@ -29,6 +29,12 @@ data class TriggerFrameMetadata(
     val missionId: String?,
     val executionLegIndex: Int?,
     val waypointIndex: Int?,
+    val aircraftRollDegrees: Double = Double.NaN,
+    val aircraftYawDegrees: Double = Double.NaN,
+    val gimbalRollDegrees: Double = Double.NaN,
+    val gimbalYawDegrees: Double = Double.NaN,
+    val gimbalYawRelativeToAircraftHeadingDegrees: Double = Double.NaN,
+    val gimbalStateUpdatedAtEpochMillis: Long = 0L,
 ) {
     val gpsAgeMillis: Long
         get() = capturedAtEpochMillis - telemetryUpdatedAtEpochMillis
@@ -46,6 +52,19 @@ data class TriggerFrameMetadata(
                     kotlin.math.abs(altitudeMeters) > 2.0)
         }
 
+    val cameraOrientation: ResolvedCameraOrientation
+        get() = CameraOrientationResolver.resolve(
+            aircraftHeadingDegrees = headingDegrees,
+            gimbalRollDegrees = gimbalRollDegrees,
+            gimbalPitchDegrees = gimbalPitchDegrees,
+            absoluteGimbalYawDegrees = gimbalYawDegrees,
+            relativeGimbalYawDegrees = gimbalYawRelativeToAircraftHeadingDegrees,
+        )
+
+    val gimbalAgeMillis: Long?
+        get() = gimbalStateUpdatedAtEpochMillis.takeIf { it > 0L }
+            ?.let { capturedAtEpochMillis - it }
+
     fun toJson(imagePath: String? = null): JSONObject = JSONObject()
         .put("schema", "openfly.trigger-frame.v1")
         .put("captured_at_epoch_ms", capturedAtEpochMillis)
@@ -60,8 +79,20 @@ data class TriggerFrameMetadata(
         .put("asl_m", finiteOrNull(aslMeters))
         .put("ground_clearance_m", finiteOrNull(groundClearanceMeters))
         .put("heading_deg", finiteOrNull(headingDegrees))
+        .put("aircraft_heading_deg", finiteOrNull(headingDegrees))
+        .put("aircraft_roll_deg", finiteOrNull(aircraftRollDegrees))
         .put("aircraft_pitch_deg", finiteOrNull(aircraftPitchDegrees))
+        .put("aircraft_yaw_deg", finiteOrNull(aircraftYawDegrees))
         .put("gimbal_pitch_deg", finiteOrNull(gimbalPitchDegrees))
+        .put("gimbal_roll_deg", finiteOrNull(gimbalRollDegrees))
+        .put("gimbal_yaw_deg_ned", finiteOrNull(gimbalYawDegrees))
+        .put("gimbal_yaw_relative_to_aircraft_deg", finiteOrNull(gimbalYawRelativeToAircraftHeadingDegrees))
+        .put("gimbal_age_ms", gimbalAgeMillis ?: JSONObject.NULL)
+        .put("camera_roll_deg", finiteOrNull(cameraOrientation.rollDegrees))
+        .put("camera_pitch_deg", finiteOrNull(cameraOrientation.pitchDegrees))
+        .put("camera_yaw_deg_true", finiteOrNull(cameraOrientation.yawDegrees))
+        .put("camera_yaw_source", cameraOrientation.yawSource ?: JSONObject.NULL)
+        .put("camera_yaw_consistency_error_deg", finiteOrNull(cameraOrientation.yawConsistencyErrorDegrees))
         .put("velocity_north_mps", finiteOrNull(velocityNorthMetersPerSecond))
         .put("velocity_east_mps", finiteOrNull(velocityEastMetersPerSecond))
         .put("velocity_down_mps", finiteOrNull(velocityDownMetersPerSecond))
@@ -70,7 +101,7 @@ data class TriggerFrameMetadata(
         .put("waypoint_index", waypointIndex ?: JSONObject.NULL)
         .put("image_path", imagePath ?: JSONObject.NULL)
 
-    private fun finiteOrNull(value: Double): Any = if (value.isFinite()) value else JSONObject.NULL
+    private fun finiteOrNull(value: Double?): Any = if (value?.isFinite() == true) value else JSONObject.NULL
 
     private companion object {
         const val MAX_AIRCRAFT_GPS_AGE_MILLIS = 2_000L
@@ -100,8 +131,8 @@ object SurveyFrameExifWriter {
                 exif.setLatLong(metadata.latitude, metadata.longitude)
                 metadata.trustedAslMeters?.let(exif::setAltitude)
             }
-            if (metadata.hasFreshAircraftGps && metadata.headingDegrees.isFinite()) {
-                val heading = (metadata.headingDegrees % 360.0 + 360.0) % 360.0
+            if (metadata.hasFreshAircraftGps && metadata.cameraOrientation.yawDegrees != null) {
+                val heading = requireNotNull(metadata.cameraOrientation.yawDegrees)
                 exif.setAttribute(ExifInterface.TAG_GPS_IMG_DIRECTION_REF, "T")
                 exif.setAttribute(ExifInterface.TAG_GPS_IMG_DIRECTION,
                     rational(heading, 1_000L))

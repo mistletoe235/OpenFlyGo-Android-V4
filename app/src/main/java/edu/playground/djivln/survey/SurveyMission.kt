@@ -318,6 +318,8 @@ data class ActiveMappingMetadata(
     }
 }
 
+enum class SurveyTerrainSourceKind { SURFACE_DSM, BARE_EARTH }
+
 data class SurveyTerrainPlan(
     val sourceName: String,
     val sourceSha256: String,
@@ -331,6 +333,8 @@ data class SurveyTerrainPlan(
     val maximumWaypointAltitudeMeters: Double,
     val realFlightVerified: Boolean = false,
     val takeoffReference: SurveyTerrainTakeoffReference? = null,
+    val sourceKind: SurveyTerrainSourceKind = SurveyTerrainSourceKind.SURFACE_DSM,
+    val bareEarthBaseSha256: String? = null,
 )
 
 data class SurveyMission(
@@ -347,8 +351,12 @@ data class SurveyMission(
     val estimatedFlightSeconds: Double,
     val terrainPlan: SurveyTerrainPlan? = null,
     val activeMapping: ActiveMappingMetadata? = null,
+    val recaptureFlightMode: RecaptureFlightMode = RecaptureFlightMode.STOP_AND_CAPTURE,
 ) {
     init {
+        require(recaptureFlightMode == RecaptureFlightMode.STOP_AND_CAPTURE || activeMapping != null) {
+            "continuous capture is only supported for active recapture missions"
+        }
         require(id.isNotBlank()) { "mission id must not be blank" }
         require(name.isNotBlank()) { "mission name must not be blank" }
         require(roi.size >= 3) { "mission ROI must contain at least three points" }

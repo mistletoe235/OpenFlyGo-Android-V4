@@ -29,7 +29,9 @@ import dji.sdk.flightcontroller.Simulator
 import dji.sdk.products.Aircraft
 import dji.sdk.sdkmanager.DJISDKManager
 import edu.playground.djivln.survey.CameraProfile
+import edu.playground.djivln.survey.SurveyCameraModePolicy
 import edu.playground.djivln.survey.DjiCameraProfileCatalog
+import edu.playground.djivln.camera.CameraOrientationResolver
 import edu.playground.djivln.camera.SurveyCameraSourcePolicy
 import edu.playground.djivln.mini2.R
 import kotlin.math.hypot
@@ -90,8 +92,10 @@ class Mini2AircraftBridge @JvmOverloads constructor(
         val groundClearanceReliableForSafety: Boolean = false,
         val downwardVisionActive: Boolean = false,
         val heading: Double = 0.0,
+        val aircraftRoll: Double = Double.NaN,
         /** DJI aircraft attitude pitch; positive means nose-down/forward. */
         val aircraftPitch: Double = 0.0,
+        val aircraftYaw: Double = Double.NaN,
         val velocityNorth: Double = 0.0,
         val velocityEast: Double = 0.0,
         val horizontalSpeed: Double = 0.0,
@@ -123,6 +127,10 @@ class Mini2AircraftBridge @JvmOverloads constructor(
         val rcPhoneChargingAvailable: Boolean = false,
         val rcPhoneChargingMode: String = "UNKNOWN",
         val gimbalPitch: Double = 0.0,
+        val gimbalRoll: Double = Double.NaN,
+        val gimbalYaw: Double = Double.NaN,
+        val gimbalYawRelativeToAircraftHeading: Double = Double.NaN,
+        val gimbalStateUpdatedAtMs: Long = 0L,
         val gimbalPitchAtStop: Boolean = false,
         val gimbalMotorOverloaded: Boolean = false,
         val gimbalMode: String = "--",
@@ -222,6 +230,7 @@ class Mini2AircraftBridge @JvmOverloads constructor(
     private var lastObservedGoingHome: Boolean? = null
     private var lastObservedLanding: Boolean? = null
     private var lastObservedFlightMode: String? = null
+    private var lastGimbalPoseLogAtMs = 0L
 
     fun bindCurrentProduct() {
         val product = DJISDKManager.getInstance().product
@@ -288,13 +297,36 @@ class Mini2AircraftBridge @JvmOverloads constructor(
         bindRemoteControllerCallbacks(product)
         product.gimbals?.firstOrNull()?.setStateCallback { state ->
             if (!isCurrentProductSession(generation, product)) return@setStateCallback
+            val now = System.currentTimeMillis()
             snapshot = snapshot.copy(
                 gimbalPitch = state.attitudeInDegrees.pitch.toDouble(),
+                gimbalRoll = state.attitudeInDegrees.roll.toDouble(),
+                gimbalYaw = state.attitudeInDegrees.yaw.toDouble(),
+                gimbalYawRelativeToAircraftHeading = state.yawRelativeToAircraftHeading.toDouble(),
+                gimbalStateUpdatedAtMs = now,
                 gimbalPitchAtStop = state.isPitchAtStop,
                 gimbalMotorOverloaded = state.isMotorOverloaded,
                 gimbalMode = state.mode?.name ?: "--",
                 updatedAtMs = System.currentTimeMillis(),
             )
+            if (now - lastGimbalPoseLogAtMs >= GIMBAL_POSE_LOG_INTERVAL_MS) {
+                lastGimbalPoseLogAtMs = now
+                val camera = CameraOrientationResolver.resolve(
+                    aircraftHeadingDegrees = snapshot.heading,
+                    gimbalRollDegrees = snapshot.gimbalRoll,
+                    gimbalPitchDegrees = snapshot.gimbalPitch,
+                    absoluteGimbalYawDegrees = snapshot.gimbalYaw,
+                    relativeGimbalYawDegrees = snapshot.gimbalYawRelativeToAircraftHeading,
+                )
+                Log.i(
+                    TAG,
+                    "CAMERA_POSE aircraftYaw=${snapshot.heading} " +
+                        "gimbalAbs=${snapshot.gimbalYaw} gimbalRel=${snapshot.gimbalYawRelativeToAircraftHeading} " +
+                        "pitch=${snapshot.gimbalPitch} roll=${snapshot.gimbalRoll} " +
+                        "cameraYaw=${camera.yawDegrees} source=${camera.yawSource} " +
+                        "consistency=${camera.yawConsistencyErrorDegrees}",
+                )
+            }
             publish()
         }
         bindCameraStateCallback(product, generation)
@@ -344,12 +376,50 @@ class Mini2AircraftBridge @JvmOverloads constructor(
     }
 
     /** Camera geometry for survey planning; unknown payloads use a clearly unverified fallback. */
+    private val surveyCameraReadback = edu.playground.djivln.survey.SurveyCameraReadbackCache()
+
     fun currentSurveyCameraResolution(): DjiCameraProfileCatalog.Resolution {
         val product = aircraft
-        return DjiCameraProfileCatalog.resolveLocalized(appContext,
-            product?.model?.name,
-            product?.model?.displayName,
-            camera?.displayName,
+        val resolved = DjiCameraProfileCatalog.resolveLocalized(appContext,
+            product?.model?.name, product?.model?.displayName, camera?.displayName,
+        )
+        val selected = camera
+        surveyCameraReadback.changeSource(selected?.takeIf { it.isConnected }?.let {
+            it to productSessionGeneration.current()
+        })
+        if (selected == null) return resolved.copy(verifiedProfile = false)
+        fun value(param: String): Any? = surveyCameraReadback.read(param) { completion ->
+            val manager = dji.keysdk.KeyManager.getInstance()
+            if (manager == null) completion(null)
+            else manager.getValue(dji.keysdk.CameraKey.create(param, selected.index),
+                object : dji.keysdk.callback.GetCallback {
+                    override fun onSuccess(value: Any) = completion(value)
+                    override fun onFailure(error: DJIError) = completion(null)
+                })
+        }
+        val ratio = when (value(dji.keysdk.CameraKey.PHOTO_ASPECT_RATIO)?.toString()) {
+            "RATIO_4_3" -> 4.0 / 3.0
+            "RATIO_3_2" -> 3.0 / 2.0
+            "RATIO_16_9" -> 16.0 / 9.0
+            else -> null
+        }
+        val flatMode = value(dji.keysdk.CameraKey.FLAT_CAMERA_MODE)?.toString()
+        val multiResolution = resolved.profile.id == "dji-mavic-air-2-photo-12mp"
+        val megapixels = when (flatMode) {
+            "PHOTO_SINGLE", "PHOTO_INTERVAL" -> if (multiResolution) 12 else null
+            "PHOTO_HIGH_RESOLUTION" -> 48
+            else -> null
+        }
+        val zoomRequired = selected.isDigitalZoomSupported
+        val zoom = (value(dji.keysdk.CameraKey.DIGITAL_ZOOM_FACTOR) as? Number)?.toDouble()
+        val orientation = value(dji.keysdk.CameraKey.ORIENTATION)?.toString()
+        val issue = SurveyCameraModePolicy.issue(
+            resolved.profile, ratio, megapixels, multiResolution, zoom, zoomRequired,
+            when (orientation) { "LANDSCAPE" -> true; "PORTRAIT" -> false; else -> null }, false,
+        )
+        return resolved.copy(
+            verifiedProfile = resolved.verifiedProfile && selected.isConnected && issue == null,
+            displayName = resolved.displayName + (issue?.let { " · [${it.name}]" } ?: ""),
         )
     }
 
@@ -615,7 +685,9 @@ class Mini2AircraftBridge @JvmOverloads constructor(
             groundClearanceReliableForSafety = altitudeTelemetry.groundClearanceReliableForSafety,
             downwardVisionActive = altitudeTelemetry.downwardVisionActive,
             heading = attitude?.yaw ?: 0.0,
+            aircraftRoll = attitude?.roll ?: 0.0,
             aircraftPitch = attitude?.pitch ?: 0.0,
+            aircraftYaw = attitude?.yaw ?: 0.0,
             velocityNorth = state.velocityX.toDouble(),
             velocityEast = state.velocityY.toDouble(),
             horizontalSpeed = hypot(state.velocityX.toDouble(), state.velocityY.toDouble()),
@@ -1656,5 +1728,6 @@ class Mini2AircraftBridge @JvmOverloads constructor(
         const val RC_GO_HOME_OBSERVATION_MS = 10_000L
         const val RC_GO_HOME_LONG_PRESS_MS = 900L
         const val RC_GO_HOME_NATIVE_GRACE_MS = 500L
+        const val GIMBAL_POSE_LOG_INTERVAL_MS = 5_000L
     }
 }

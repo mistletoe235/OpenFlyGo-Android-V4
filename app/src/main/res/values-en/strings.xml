@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="v86_continuous_recapture">Request continuous recapture (experimental, schema 14)</string>
+    <string name="v86_continuous_recapture_hint">V4 uses app-side velocity control. Eligible interior points capture while moving; turns and endpoints still stop. Camera or pose faults pause the mission. Keep the app foreground.</string>
+    <string name="continuous_capture_window_missed">Continuous capture window passed without a photo request; paused. Check the camera before resuming.</string>
+    <string name="continuous_capture_pose_lost">Pose or telemetry became invalid while confirming a continuous capture; paused.</string>
     <string name="dji_account">DJI Account</string>
     <string name="login_dji_account">Log in to DJI Account</string>
     <string name="relogin_dji_account">Log in Again</string>
@@ -26,7 +30,7 @@
     <string name="camera_matrice_30t_thermal_unverified">DJI Matrice 30T Thermal (verify resolution mode)</string>
     <string name="camera_matrice_30_lens_unverified">DJI Matrice 30 Series (select and verify the lens)</string>
     <string name="current_camera_disconnected">The current camera is disconnected</string>
-    <string name="current_camera_not_calibrated">The current camera is not calibrated</string>
+    <string name="current_camera_not_calibrated">Camera parameters are unconfirmed or differ from the mission: check lens, photo ratio, resolution and 1x zoom</string>
     <string name="camera_aspect_mismatch">The mission requires a %1$.2f:1 aspect ratio; the current camera profile is %2$.2f:1</string>
     <string name="camera_interval_too_slow">The current camera minimum capture interval is %1$.2fs; the mission requires %2$.2fs</string>
     <string name="mission_gimbal_pitch_out_of_range">Mission gimbal pitch %1$.1f° is outside the general execution range -90° to 30°</string>
@@ -1214,4 +1218,22 @@
     <string name="endurance_battery">, battery %1$d%%</string>
     <string name="endurance_rth_needed">, return requires %1$d%%</string>
     <string name="endurance_landing_needed">, landing requires %1$d%%</string>
+    <string name="survey_capture_pose_timeout">Aircraft heading or gimbal pose did not stabilize after arrival; the mission was paused automatically.</string>
+    <string name="v86_remote_open">Open existing cloud session</string>
+    <string name="v86_remote_upload">Capture and upload from this device</string>
+    <string name="v86_remote_endpoint">Service root URL (HTTP/HTTPS, not SSH)</string>
+    <string name="v86_remote_token">Access code</string>
+    <string name="v86_remote_session">Existing session ID</string>
+    <string name="v86_remote_description">Read-only: view point clouds and download approved missions. No uploads, processing or flight commands. HTTP sends the access code in plaintext; prefer HTTPS.</string>
+    <string name="v86_remote_refresh">Connect / refresh result</string>
+    <string name="v86_remote_cloud">Download and view point cloud</string>
+    <string name="v86_remote_mission">Download / preview mission</string>
+    <string name="v86_remote_loading">Reading cloud data…</string>
+    <string name="v86_remote_failed">Cloud request failed: %1$s</string>
+    <string name="v86_remote_unapproved">Unapproved missions are read-only previews. Relative-height tests provide point clouds only.</string>
+    <string name="v86_remote_preview_only">Read-only route preview: no mission activation or flight control. North-up; no terrain or obstacle information.</string>
+    <string name="v86_remote_preview_stats">%1$d waypoints · height above takeoff %2$s–%3$s m</string>
+    <string name="v86_remote_cloud_ready">Point cloud opened; this is not a live obstacle map.</string>
+    <string name="v86_remote_review">Import only loads the route; it does not take off or execute. Check the map, coordinates and altitude, then complete preflight checks.</string>
+    <string name="v86_remote_import">Import mission (no execution)</string>
 </resources>

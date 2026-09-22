@@ -27,6 +27,9 @@ object ImportedMissionCameraCompatibilityPolicy {
         if (!profileVerified) reasons += text(
             context, R.string.current_camera_not_calibrated, "Current camera is not calibrated")
 
+        if (!SurveyCameraModePolicy.compatibleRecapture(mission.cameraProfile, currentCamera)) {
+            reasons += text(context, R.string.current_camera_not_calibrated, "Current camera is not calibrated")
+        }
         val missionAspect = mission.cameraProfile.imageWidthPixels.toDouble() /
             mission.cameraProfile.imageHeightPixels
         val currentAspect = currentCamera.imageWidthPixels.toDouble() /
