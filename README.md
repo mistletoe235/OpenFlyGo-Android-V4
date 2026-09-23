@@ -31,6 +31,14 @@ handoff.
 The current public release intentionally excludes VLN, on-device model inference, remote inference,
 model distribution, and their native runtimes. Those features are planned for a later release.
 
+## App preview
+
+| Survey area | Capture settings |
+| --- | --- |
+| ![Android V4 survey-area panel with boundary editing and aircraft selection.](docs/images/survey-area.webp) | ![Android V4 capture panel with nadir and four oblique capture directions.](docs/images/survey-capture.webp) |
+
+*Native Android V4 panels captured in an offline emulator; no aircraft connected.*
+
 ## Download and install
 
 - [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/download/v0.3.1-v4/OpenFlyGo-Android-V4-0.3.1.apk)
