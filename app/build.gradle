@@ -61,12 +61,13 @@ android {
         applicationId openFlyApplicationId
         minSdk 24
         targetSdk 33
-        versionCode Integer.parseInt((project.findProperty('OPENFLY_VERSION_CODE') ?: '3').toString())
+        versionCode Integer.parseInt((project.findProperty('OPENFLY_VERSION_CODE') ?: '4').toString())
         versionName (project.findProperty('OPENFLY_VERSION_NAME') ?: '0.3.0-v4').toString()
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resourceConfigurations += ['en', 'zh-rCN']
         manifestPlaceholders['API_KEY'] = aircraftApiKey
         manifestPlaceholders['BAIDU_MAP_AK'] = baiduMapAk
+        buildConfigField 'boolean', 'SAVE_TRIGGER_FRAMES_TO_PHONE', 'false'
         buildConfigField 'String', 'GLOBAL_BUILDING_HEIGHT_COG_TEMPLATE',
                 '"' + globalBuildingHeightCogTemplate.replace('\\', '\\\\').replace('"', '\\"') + '"'
         buildConfigField 'String', 'V86_DEFAULT_ENDPOINT',
@@ -89,8 +90,12 @@ android {
     }
 
     buildTypes {
-        debug { minifyEnabled false }
+        debug {
+            minifyEnabled false
+            buildConfigField 'boolean', 'ENABLE_TERRAIN_FOLLOWING', 'true'
+        }
         release {
+            buildConfigField 'boolean', 'ENABLE_TERRAIN_FOLLOWING', 'false'
             if (releaseSigningFile.exists()) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

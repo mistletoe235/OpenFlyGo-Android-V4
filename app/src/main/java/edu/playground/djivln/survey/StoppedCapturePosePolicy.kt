@@ -14,6 +14,9 @@ object StoppedCapturePosePolicy {
     private const val MAX_SAMPLE_AGE_MILLIS = 1_000L
 
     @JvmStatic
+    fun requiresStoppedPose(action: CaptureAction): Boolean = action == CaptureAction.CAPTURE_ON_REACH
+
+    @JvmStatic
     fun aligned(
         connected: Boolean,
         headingDegrees: Double,

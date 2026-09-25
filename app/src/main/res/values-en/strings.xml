@@ -30,7 +30,7 @@
     <string name="camera_matrice_30t_thermal_unverified">DJI Matrice 30T Thermal (verify resolution mode)</string>
     <string name="camera_matrice_30_lens_unverified">DJI Matrice 30 Series (select and verify the lens)</string>
     <string name="current_camera_disconnected">The current camera is disconnected</string>
-    <string name="current_camera_not_calibrated">Camera parameters are unconfirmed or differ from the mission: check lens, photo ratio, resolution and 1x zoom</string>
+    <string name="current_camera_not_calibrated">Camera parameters are unconfirmed or differ from this mission; coverage and GSD are estimates. Execution remains available.</string>
     <string name="camera_aspect_mismatch">The mission requires a %1$.2f:1 aspect ratio; the current camera profile is %2$.2f:1</string>
     <string name="camera_interval_too_slow">The current camera minimum capture interval is %1$.2fs; the mission requires %2$.2fs</string>
     <string name="mission_gimbal_pitch_out_of_range">Mission gimbal pitch %1$.1f° is outside the general execution range -90° to 30°</string>
@@ -1003,7 +1003,7 @@
     <string name="hil_tcp_waiting_for_ue">TCP %1$d is waiting for UE</string>
     <string name="hil_tcp_closed">TCP %1$d is closed</string>
     <string name="unrecognized">Unrecognized</string>
-    <string name="camera_uncalibrated_suffix"> · Uncalibrated</string>
+    <string name="camera_uncalibrated_suffix"> · Estimated parameters</string>
     <string name="remote_controller_disconnected">Remote controller disconnected</string>
     <string name="rc_will_charge_phone">Remote controller will charge the phone</string>
     <string name="rc_phone_charging_disabled">Remote-controller phone charging disabled</string>
@@ -1236,4 +1236,5 @@
     <string name="v86_remote_cloud_ready">Point cloud opened; this is not a live obstacle map.</string>
     <string name="v86_remote_review">Import only loads the route; it does not take off or execute. Check the map, coordinates and altitude, then complete preflight checks.</string>
     <string name="v86_remote_import">Import mission (no execution)</string>
+    <string name="terrain_disabled_in_release">Terrain following is unavailable in release builds. Use a regular mission. The original terrain mission file is unchanged.</string>
 </resources>

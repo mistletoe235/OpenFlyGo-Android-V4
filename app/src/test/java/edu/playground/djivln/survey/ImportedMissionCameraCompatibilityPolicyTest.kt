@@ -6,6 +6,18 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ImportedMissionCameraCompatibilityPolicyTest {
+    @Test fun unlistedCameraAndDifferentGeometryOnlyWarn() {
+        val mission = fixture()
+        val result = ImportedMissionCameraCompatibilityPolicy.evaluate(
+            mission,
+            mission.cameraProfile.copy(id = "unlisted-camera", imageHeightPixels = 2250),
+            cameraConnected = true,
+            profileVerified = false,
+        )
+        assertTrue(result.reasons.joinToString(), result.compatible)
+        assertTrue(result.warnings.isNotEmpty())
+    }
+
     private fun fixture(): SurveyMission {
         val root = File(requireNotNull(System.getProperty("user.dir")))
         val file = listOf(
@@ -42,8 +54,8 @@ class ImportedMissionCameraCompatibilityPolicyTest {
         )
         assertFalse(result.compatible)
         assertTrue(result.reasons.any { it.contains("disconnected") })
-        assertTrue(result.reasons.any { it.contains("not calibrated") })
-        assertTrue(result.reasons.any { it.contains("aspect ratio") })
+        assertTrue(result.warnings.any { it.contains("estimated") })
+        assertTrue(result.warnings.any { it.contains("aspect ratio") })
         assertTrue(result.reasons.any { it.contains("minimum capture interval") })
     }
 }

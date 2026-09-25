@@ -72,6 +72,7 @@ enum class SurveyExecutionBlock {
     MAX_FLIGHT_RADIUS_TOO_SMALL,
     FLIGHT_CONTROLLER_FAILSAFE_ACTIVE,
     TERRAIN_REAL_FLIGHT_NOT_VERIFIED,
+    CAMERA_UNAVAILABLE,
 }
 
 data class SurveyExecutionGateResult(

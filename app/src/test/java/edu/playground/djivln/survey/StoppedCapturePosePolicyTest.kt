@@ -5,6 +5,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class StoppedCapturePosePolicyTest {
+    @Test fun onlyPointPhotosRequireStoppedPose() {
+        assertTrue(StoppedCapturePosePolicy.requiresStoppedPose(CaptureAction.CAPTURE_ON_REACH))
+        assertFalse(StoppedCapturePosePolicy.requiresStoppedPose(CaptureAction.START_DISTANCE_INTERVAL))
+        assertFalse(StoppedCapturePosePolicy.requiresStoppedPose(CaptureAction.STOP_DISTANCE_INTERVAL))
+        assertFalse(StoppedCapturePosePolicy.requiresStoppedPose(CaptureAction.NONE))
+    }
+
     @Test
     fun `stopped capture requires aligned fresh pose and stable dwell`() {
         val target = SurveyWaypoint(

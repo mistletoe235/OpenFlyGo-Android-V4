@@ -142,6 +142,22 @@ class SurveySimulatorExecutionTest {
     }
 
     @Test
+    fun `duplicate pause preserves original reason and recovery point`() {
+        val mission = mission()
+        val machine = SurveySimulatorExecutionStateMachine(mission)
+        machine.requestArm(SurveySimulatorGate.evaluate(mission, telemetry(), now, false))
+        machine.onVirtualStickReady(
+            SurveySimulatorGate.evaluate(mission, telemetry(virtualStickEnabled = true), now, true),
+        )
+        val recovery = GeoPoint(31.23042, 121.47372, 40.0)
+        val first = machine.pause("pose timeout", recovery)
+        val second = machine.pause("background", null)
+        assertEquals(first, second)
+        assertEquals(SurveyExecutionState.PAUSED, second.state)
+        assertEquals(recovery, machine.pausedRecoveryPoint())
+    }
+
+    @Test
     fun `manual takeover and stale telemetry pause a running mission`() {
         val mission = mission()
         val machine = SurveySimulatorExecutionStateMachine(mission)

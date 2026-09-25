@@ -524,6 +524,9 @@ class V86StreamingController(
         QueueScan(pending, issues, sequences.maxOrNull())
     }
 
+    fun canAcceptCaptureFrames(): Boolean = current().sessionId != null &&
+        runCatching { ensureSessionAcceptsImages() }.isSuccess
+
     private fun ensureSessionAcceptsImages() {
         val snapshot = current()
         check(!closed) { "V86 controller is closed" }

@@ -3620,6 +3620,9 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void showSurveyPlannerTab(int tab) {
+        if (!BuildConfig.ENABLE_TERRAIN_FOLLOWING && tab == SURVEY_TAB_TERRAIN) {
+            tab = SURVEY_TAB_AREA;
+        }
         surveyPlannerTab = Math.max(SURVEY_TAB_AREA, Math.min(SURVEY_TAB_TERRAIN, tab));
         View area = findViewById(R.id.survey_area_section);
         View route = findViewById(R.id.survey_route_section);
@@ -3660,6 +3663,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         }
         Button terrainTab = findViewById(R.id.survey_tab_terrain_button);
         if (terrainTab != null) {
+            terrainTab.setVisibility(BuildConfig.ENABLE_TERRAIN_FOLLOWING ? View.VISIBLE : View.GONE);
             terrainTab.setText(surveyTerrainFollowingEnabled
                     ? getString(R.string.survey_terrain_on) : getString(R.string.terrain));
         }
@@ -3733,6 +3737,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void setSurveyTerrainFollowingEnabled(boolean enabled, boolean userInitiated) {
+        enabled = BuildConfig.ENABLE_TERRAIN_FOLLOWING && enabled;
         boolean changed = surveyTerrainFollowingEnabled != enabled;
         surveyTerrainFollowingEnabled = enabled;
         renderSurveyTerrainModeControl();
@@ -4900,7 +4905,8 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 throw new IllegalArgumentException("unsupported planner settings schema");
             }
             surveySpeedHintFiveDirection = root.optBoolean("five_direction", false);
-            surveyTerrainFollowingEnabled = root.optBoolean("terrain_enabled", false);
+            surveyTerrainFollowingEnabled = BuildConfig.ENABLE_TERRAIN_FOLLOWING
+                    && root.optBoolean("terrain_enabled", false);
             surveyEnabledCaptureViews.clear();
             org.json.JSONArray captureViews = root.optJSONArray("enabled_capture_views");
             if (captureViews == null) {
@@ -5285,7 +5291,8 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             String environment = aircraftSnapshot.getSimulatorActive()
                     ? "SIMULATOR" : getString(R.string.survey_gate_real_manual);
             setSurveySimulatorStatus(getString(R.string.survey_gate_passed,
-                    gate.getStartDistanceMeters(), environment), false);
+                    gate.getStartDistanceMeters(), environment)
+                    + (lastCameraGeometryWarning.isEmpty() ? "" : " · " + lastCameraGeometryWarning), false);
             appendLog(String.format(Locale.US,
                     "SURVEY simulator gate allowed start=%.1fm · NO_CONTROL", gate.getStartDistanceMeters()));
         } else {
@@ -5299,6 +5306,8 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             appendLog("SURVEY simulator gate blocked: " + gate.getBlocks() + " · NO_CONTROL");
         }
     }
+
+    private String lastCameraGeometryWarning = "";
 
     private SurveyExecutionGateResult currentSurveySimulatorGate(boolean requireVirtualStick) {
         return currentSurveySimulatorGate(requireVirtualStick, false, true);
@@ -5347,16 +5356,25 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         if (!virtualCamera && surveyMission != null) {
             DjiCameraProfileCatalog.Resolution camera = aircraftBridge == null
                     ? null : aircraftBridge.currentSurveyCameraResolution();
-            if (camera == null || !camera.getVerifiedProfile()
-                    || !(surveyMission.getActiveMapping() == null
+            boolean geometryConfirmed = camera != null && camera.getVerifiedProfile()
+                    && (surveyMission.getActiveMapping() == null
                         ? edu.playground.djivln.survey.SurveyCameraModePolicy.INSTANCE.sameGeometry(
                             surveyMission.getCameraProfile(), camera.getProfile())
                         : edu.playground.djivln.survey.SurveyCameraModePolicy.INSTANCE.compatibleRecapture(
-                            surveyMission.getCameraProfile(), camera.getProfile()))) {
-                java.util.Set<SurveyExecutionBlock> blocks = new java.util.LinkedHashSet<>(result.getBlocks());
-                blocks.add(SurveyExecutionBlock.CAMERA_GEOMETRY_UNVERIFIED);
-                return new SurveyExecutionGateResult(false, blocks, result.getStartDistanceMeters());
+                            surveyMission.getCameraProfile(), camera.getProfile()));
+            edu.playground.djivln.survey.SurveyCameraExecutionAssessment assessment =
+                    edu.playground.djivln.survey.SurveyCameraExecutionPolicy.INSTANCE.evaluate(
+                            result, aircraftBridge != null && aircraftBridge.isSurveyCameraConnected(),
+                            geometryConfirmed);
+            String warning = assessment.getGeometryWarning()
+                    ? getString(R.string.current_camera_not_calibrated) : "";
+            if (!warning.equals(lastCameraGeometryWarning)) {
+                if (!warning.isEmpty()) appendLog("SURVEY camera geometry advisory: " + warning
+                        + " · current=" + (camera == null ? "unavailable" : camera.getDisplayName())
+                        + " · planned=" + surveyMission.getCameraProfile().getId());
+                lastCameraGeometryWarning = warning;
             }
+            return assessment.getGate();
         }
         return result;
     }
@@ -5377,6 +5395,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             case UNSUPPORTED_COORDINATE_FRAME: return getString(R.string.gate_coordinate_frame_invalid);
             case MISSION_TOO_LONG: return getString(R.string.gate_mission_too_long);
             case MISSION_ALTITUDE_UNSAFE: return getString(R.string.gate_mission_altitude_unsafe);
+            case CAMERA_UNAVAILABLE: return getString(R.string.current_camera_disconnected);
             case CAMERA_GEOMETRY_UNVERIFIED: return getString(R.string.current_camera_not_calibrated);
             case CAMERA_TRIGGER_UNSAFE: return getString(R.string.gate_camera_trigger_unsafe);
             case AIRCRAFT_BATTERY_LOW: return getString(R.string.gate_aircraft_battery_low);
@@ -5837,8 +5856,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 scheduleNextSurveyControlTick();
                 return;
             }
-            if ((startsCapture || target.getCaptureAction()
-                    == edu.playground.djivln.survey.CaptureAction.CAPTURE_ON_REACH)
+            if (StoppedCapturePosePolicy.requiresStoppedPose(target.getCaptureAction())
                     && !deferNadirCaptureStart && !capturePoseReady) {
                 if (surveyCapturePoseVerificationStartedElapsedMs == 0L) {
                     surveyCapturePoseVerificationStartedElapsedMs = nowElapsedMs;
@@ -6329,8 +6347,15 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         });
     }
 
+    private boolean shouldCaptureTriggerFrame() {
+        V86StreamingController streaming = v86Controller;
+        return BuildConfig.SAVE_TRIGGER_FRAMES_TO_PHONE
+                || (streaming != null && streaming.canAcceptCaptureFrames());
+    }
+
     private long beginTriggerAlignedFrameCapture(
             String reason, long triggeredAtElapsedNanos, long triggeredAtEpochMillis) {
+        if (!shouldCaptureTriggerFrame()) return 0L;
         DJICodecManager codec = codecManager;
         if (codec == null) {
             appendLog("TRIGGER_FRAME skipped: DJI decoder unavailable · " + reason);
@@ -6462,24 +6487,26 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             byte[] jpeg = SurveyFrameExifWriter.INSTANCE.write(
                     output.toByteArray(), metadata,
                     new File(getCacheDir(), "trigger-frame-exif"));
-            String timestamp = new SimpleDateFormat(
-                    "yyyyMMdd_HHmmss_SSS", Locale.US).format(
-                    new Date(metadata.getCapturedAtEpochMillis()));
-            String baseName = String.format(Locale.US, "TRIGGER_%s_%06d",
-                    timestamp, metadata.getCapturedAtEpochMillis() % 1_000_000L);
-            String directory = "trigger-frames/" + safeStorageName(
-                    metadata.getMissionId() == null ? "manual" : metadata.getMissionId());
-            String imagePath = savePublicDownloadFile(
-                    directory, baseName + ".jpg", "image/jpeg", jpeg);
-            JSONObject sidecar = metadata.toJson(imagePath)
-                    .put("photo_result", resultMessage == null ? JSONObject.NULL : resultMessage);
-            String metadataPath = savePublicDownloadFile(
-                    directory, baseName + ".json", "application/json",
-                    sidecar.toString(2).getBytes(StandardCharsets.UTF_8));
-            writePersistentLogLine(String.format(Locale.US,
-                    "%tF %<tT.%<tL  TRIGGER_FRAME image=%s metadata=%s reason=%s bytes=%d\n",
-                    metadata.getCapturedAtEpochMillis(), imagePath, metadataPath,
-                    metadata.getTriggerReason(), jpeg.length));
+            if (BuildConfig.SAVE_TRIGGER_FRAMES_TO_PHONE) {
+                String timestamp = new SimpleDateFormat(
+                        "yyyyMMdd_HHmmss_SSS", Locale.US).format(
+                        new Date(metadata.getCapturedAtEpochMillis()));
+                String baseName = String.format(Locale.US, "TRIGGER_%s_%06d",
+                        timestamp, metadata.getCapturedAtEpochMillis() % 1_000_000L);
+                String directory = "trigger-frames/" + safeStorageName(
+                        metadata.getMissionId() == null ? "manual" : metadata.getMissionId());
+                String imagePath = savePublicDownloadFile(
+                        directory, baseName + ".jpg", "image/jpeg", jpeg);
+                JSONObject sidecar = metadata.toJson(imagePath)
+                        .put("photo_result", resultMessage == null ? JSONObject.NULL : resultMessage);
+                String metadataPath = savePublicDownloadFile(
+                        directory, baseName + ".json", "application/json",
+                        sidecar.toString(2).getBytes(StandardCharsets.UTF_8));
+                writePersistentLogLine(String.format(Locale.US,
+                        "%tF %<tT.%<tL  TRIGGER_FRAME image=%s metadata=%s reason=%s bytes=%d\n",
+                        metadata.getCapturedAtEpochMillis(), imagePath, metadataPath,
+                        metadata.getTriggerReason(), jpeg.length));
+            }
             V86StreamingController streaming = v86Controller;
             if (streaming != null && streaming.current().getSessionId() != null) {
                 streaming.enqueueCaptureError(jpeg, metadata);
@@ -6746,6 +6773,10 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             detail = executionStatus.getState().name();
         }
         boolean danger = executionStatus.getState() == SurveyExecutionState.ABORTED;
+        if (executionStatus.getState() == SurveyExecutionState.RUNNING
+                && !surveyUiDryRunMode && !lastCameraGeometryWarning.isEmpty()) {
+            detail += " · " + lastCameraGeometryWarning;
+        }
         setSurveySimulatorStatus(detail, danger);
         Button start = findViewById(R.id.survey_sim_start_button);
         if (start != null) start.setText(executionStatus.getState() == SurveyExecutionState.PAUSED
@@ -7044,6 +7075,11 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void activateSurveyMission(SurveyMission mission, String statusPrefix) {
+        if (!BuildConfig.ENABLE_TERRAIN_FOLLOWING && mission.getTerrainPlan() != null) {
+            renderSurveyStatus(getString(R.string.terrain_disabled_in_release));
+            showBanner(getString(R.string.terrain_disabled_in_release));
+            return;
+        }
         abortSurveySimulatorExecution(getString(R.string.reason_switch_survey_mission), true);
         stopSurveyReplay(true);
         surveyMission = mission;
@@ -7074,6 +7110,11 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         if (missionRaw == null) return;
         try {
             SurveyMission restoredMission = SurveyMissionJson.INSTANCE.decode(missionRaw);
+            if (!BuildConfig.ENABLE_TERRAIN_FOLLOWING && restoredMission.getTerrainPlan() != null) {
+                renderSurveyStatus(getString(R.string.terrain_disabled_in_release));
+                appendLog("SURVEY terrain session retained on disk but not activated in release");
+                return;
+            }
             String normalizedMissionJson = SurveyMissionJson.INSTANCE.encode(restoredMission);
             if (!normalizedMissionJson.equals(missionRaw)) {
                 preferences.edit().putString(SURVEY_MISSION_KEY, normalizedMissionJson).apply();
@@ -9295,6 +9336,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void chooseSurveyDsm() {
+        if (!BuildConfig.ENABLE_TERRAIN_FOLLOWING) return;
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/tiff");
@@ -9304,6 +9346,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void chooseSurveyBuildingHeight() {
+        if (!BuildConfig.ENABLE_TERRAIN_FOLLOWING) return;
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/tiff");
@@ -9516,6 +9559,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void downloadGlobalSurveyTerrain() {
+        if (!BuildConfig.ENABLE_TERRAIN_FOLLOWING) return;
         if (surveyTerrainCalculationInFlight) {
             renderSurveyStatus(getString(R.string.terrain_processing_wait));
             return;
@@ -9587,6 +9631,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     }
 
     private void downloadGlobalBuildingHeights() {
+        if (!BuildConfig.ENABLE_TERRAIN_FOLLOWING) return;
         if (surveyTerrainCalculationInFlight) {
             renderSurveyStatus(getString(R.string.terrain_processing_wait));
             return;
