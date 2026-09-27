@@ -1,5 +1,7 @@
 # OpenFly Go for Android — MSDK V4
 
+[Q&A: capture checks, simulator cooling and recovery after interruption](docs/FAQ.md).
+
 **Phone image storage:** ordinary capture no longer saves extra downlink JPEG/JSON copies by default.
 Aircraft SD photos are unaffected; explicitly enabled cloud collection keeps only the required retry
 queue. See [storage defaults and exceptions](docs/PHONE_IMAGE_STORAGE_2026-09-25.md).
@@ -21,7 +23,7 @@ Part of [OpenFlyScan](https://github.com/mistletoe235/OpenFlyScan) ·
 
 > Quick links: [Client selection](#client-selection-and-aircraft-support) · [HIL](docs/HIL_QUICKSTART.md) · [Cloud workflow](docs/CLOUD_ROUTE_WORKFLOW.md)
 >
-> [Project home](https://github.com/mistletoe235/OpenFlyScan) · [English](README.md) · [Chinese reference](README.zh-CN.md)
+> [Project home](https://github.com/mistletoe235/OpenFlyScan) · [English](README.md) · [中文](README.zh-CN.md)
 
 
 Cloud point-cloud viewing and existing-session route import are included; see
@@ -45,11 +47,11 @@ model distribution, and their native runtimes. Those features are planned for a 
 
 ## Download and install
 
-- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/download/v0.3.5-v4/OpenFlyGo-Android-V4-0.3.5.apk)
-- [App release and notices](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/tag/v0.3.5-v4)
-- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/mobile-20260925)
+- [Signed Android APK](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/download/v0.3.6-v4/OpenFlyGo-Android-V4-0.3.6.apk)
+- [App release and notices](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/tag/v0.3.6-v4)
+- [Identical APK in the main project release](https://github.com/mistletoe235/OpenFlyScan/releases/tag/mobile-20260927)
 
-Version `0.3.5-v4`, versionCode `9`; arm64 Android 7.0 or later. This is the
+Version `0.3.6-v4`, versionCode `10`; arm64 Android 7.0 or later. This is the
 survey/capture source-release client, not the private model-inference build.
 The Android Release APK is publicly downloadable from Releases.
 

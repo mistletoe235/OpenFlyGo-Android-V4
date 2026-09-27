@@ -1,6 +1,6 @@
 # Android V4 schema 14 continuous reacquisition
 
-[English](SCHEMA14_CONTINUOUS_RECAPTURE_2026-09-22.md) · [Chinese reference](SCHEMA14_CONTINUOUS_RECAPTURE_2026-09-22.zh-CN.md)
+[English](SCHEMA14_CONTINUOUS_RECAPTURE_2026-09-22.md) · [中文](SCHEMA14_CONTINUOUS_RECAPTURE_2026-09-22.zh-CN.md)
 
 Date: September 22, 2026. This validation record covers the private and
 source-release Android V4 projects. iOS also gained schema 14 support later the

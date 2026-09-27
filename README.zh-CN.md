@@ -1,5 +1,9 @@
 # OpenFly Go for Android — MSDK V4
 
+正式版：**0.3.6-v4（10）** · [下载 APK](https://github.com/mistletoe235/OpenFlyGo-Android-V4/releases/download/v0.3.6-v4/OpenFlyGo-Android-V4-0.3.6.apk) · [更新说明](docs/RELEASE_0.3.6.md)。
+
+[常见问题 Q&A：拍照确认、仿真散热与异常中断恢复](docs/FAQ.zh-CN.md)。
+
 **手机图片存储更新：** 普通拍照默认不再额外往手机保存图传 JPEG / JSON。飞机 SD 卡拍照不变；
 主动开启云端采集仍保留必要的待传缓存。详见 [默认行为与例外](docs/PHONE_IMAGE_STORAGE_2026-09-25.md)。
 
