@@ -3,6 +3,7 @@
     android:id="@+id/root_hud"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     android:background="#000000">
 
     <TextureView

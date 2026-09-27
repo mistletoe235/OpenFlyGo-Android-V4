@@ -1315,7 +1315,7 @@ class Mini2AircraftBridge @JvmOverloads constructor(
             val message = error?.description ?: text(R.string.enabled, "Enabled")
             action(text(R.string.simulator_regression_virtual_stick,
                 "Simulator regression Virtual Stick"), ok, message)
-            main.post { listener.onResult(ok, message) }
+            postForVirtualStickTransition(generation, fc, Runnable { listener.onResult(ok, message) })
         }
     }
 
@@ -1469,7 +1469,7 @@ class Mini2AircraftBridge @JvmOverloads constructor(
             snapshot = snapshot.copy(virtualStickEnabled = error == null)
             publish()
             action("Virtual Stick", error == null, error?.description ?: text(R.string.enabled, "Enabled"))
-            if (error == null && onReady != null) main.post(onReady)
+            if (error == null && onReady != null) postForVirtualStickTransition(generation, fc, onReady)
         }
     }
 
@@ -1496,7 +1496,7 @@ class Mini2AircraftBridge @JvmOverloads constructor(
             publish()
             action(text(R.string.simulator_regression_virtual_stick,
                 "Simulator regression Virtual Stick"), ok, message)
-            main.post { listener.onResult(ok, message) }
+            postForVirtualStickTransition(generation, fc, Runnable { listener.onResult(ok, message) })
         }
     }
 
@@ -1516,7 +1516,7 @@ class Mini2AircraftBridge @JvmOverloads constructor(
             if (!isCurrentVirtualStickTransition(generation, fc)) return@setVirtualStickModeEnabled
             action("Virtual Stick", error == null, error?.description
                 ?: text(R.string.released_with_reason, "Released: $reason", reason))
-            if (error == null && onDisabled != null) main.post(onDisabled)
+            if (error == null && onDisabled != null) postForVirtualStickTransition(generation, fc, onDisabled)
         }
     }
 
@@ -1539,6 +1539,10 @@ class Mini2AircraftBridge @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    private fun postForVirtualStickTransition(generation: Long, controller: FlightController, callback: Runnable) {
+        main.post(virtualStickTransitionGeneration.guarded(generation, { flightController === controller }, callback))
     }
 
     private fun isCurrentVirtualStickTransition(generation: Long, controller: FlightController): Boolean =

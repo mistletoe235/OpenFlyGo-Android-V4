@@ -11,4 +11,8 @@ class CallbackGeneration(initialValue: Long = 0L) {
     fun next(): Long = value.incrementAndGet()
 
     fun accepts(candidate: Long): Boolean = candidate == value.get()
+
+    fun guarded(candidate: Long, sameSession: () -> Boolean, callback: Runnable): Runnable = Runnable {
+        if (accepts(candidate) && sameSession()) callback.run()
+    }
 }

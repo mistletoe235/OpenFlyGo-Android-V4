@@ -204,6 +204,7 @@ import edu.playground.djivln.survey.SurveySimulatorMapPose;
 import edu.playground.djivln.survey.SurveySimulatorMapProjection;
 import edu.playground.djivln.survey.TerrainImportSafety;
 import edu.playground.djivln.survey.MapMarkerUpdatePolicy;
+import edu.playground.djivln.camera.SurveyFrameWorkBudget;
 import edu.playground.djivln.survey.SurveyWaypoint;
 import kotlin.Unit;
 
@@ -506,6 +507,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
     private long surveyTriggerFrameId;
     private long triggerFrameSequence;
     private final Map<Long, PendingTriggerFrame> pendingTriggerFrames = new HashMap<>();
+    private final SurveyFrameWorkBudget triggerFrameBudget = new SurveyFrameWorkBudget(2);
     private int surveyPointCapturePendingLegIndex = -1;
     private int surveyPointCaptureCompletedLegIndex = -1;
 
@@ -516,12 +518,15 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         final long triggeredAtElapsedNanos;
         Bitmap bitmap;
         boolean bitmapRequested;
+        boolean bitmapReturned;
+        final SurveyFrameWorkBudget.Lease lease;
         Boolean photoSucceeded;
         String resultMessage;
 
         PendingTriggerFrame(long id, TriggerFrameMetadata metadata,
-                            long baselineVideoSequence, long triggeredAtElapsedNanos) {
+                            long baselineVideoSequence, long triggeredAtElapsedNanos, SurveyFrameWorkBudget.Lease lease) {
             this.id = id;
+            this.lease = lease;
             this.metadata = metadata;
             this.baselineVideoSequence = baselineVideoSequence;
             this.triggeredAtElapsedNanos = triggeredAtElapsedNanos;
@@ -6355,7 +6360,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
 
     private long beginTriggerAlignedFrameCapture(
             String reason, long triggeredAtElapsedNanos, long triggeredAtEpochMillis) {
-        if (!shouldCaptureTriggerFrame()) return 0L;
+        if (activityDestroyed || !shouldCaptureTriggerFrame()) return 0L;
         DJICodecManager codec = codecManager;
         if (codec == null) {
             appendLog("TRIGGER_FRAME skipped: DJI decoder unavailable · " + reason);
@@ -6391,8 +6396,13 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 snapshot.getGimbalRoll(), snapshot.getGimbalYaw(),
                 snapshot.getGimbalYawRelativeToAircraftHeading(),
                 snapshot.getGimbalStateUpdatedAtMs());
+        SurveyFrameWorkBudget.Lease lease = triggerFrameBudget.tryAcquire();
+        if (lease == null) {
+            appendLog("TRIGGER_FRAME skipped: phone frame pipeline busy; aircraft photo is unaffected");
+            return 0L;
+        }
         PendingTriggerFrame pending = new PendingTriggerFrame(
-                id, metadata, baselineVideoSequence, triggeredAtElapsedNanos);
+                id, metadata, baselineVideoSequence, triggeredAtElapsedNanos, lease);
         pendingTriggerFrames.put(id, pending);
         awaitFreshPostTriggerFrame(id);
         mainHandler.postDelayed(() -> expirePendingTriggerFrame(id), 3_000L);
@@ -6436,15 +6446,24 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 frameSnapshot.getGimbalYawRelativeToAircraftHeading(),
                 frameSnapshot.getGimbalStateUpdatedAtMs());
         pending.bitmapRequested = true;
-        codec.getBitmap(bitmap -> runOnUiThread(() -> {
-            PendingTriggerFrame current = pendingTriggerFrames.get(id);
-            if (current == null) {
-                if (bitmap != null) bitmap.recycle();
-                return;
-            }
-            current.bitmap = bitmap;
-            finalizeTriggerAlignedFrameIfReady(current);
-        }));
+        try {
+            codec.getBitmap(bitmap -> runOnUiThread(() -> {
+                pending.bitmapReturned = true;
+                PendingTriggerFrame current = pendingTriggerFrames.get(id);
+                if (current == null) {
+                    if (bitmap != null) bitmap.recycle();
+                    pending.lease.close();
+                    return;
+                }
+                current.bitmap = bitmap;
+                finalizeTriggerAlignedFrameIfReady(current);
+            }));
+        } catch (RuntimeException error) {
+            pending.bitmapReturned = true;
+            pendingTriggerFrames.remove(id);
+            discardPendingTriggerFrame(pending);
+            appendLog("TRIGGER_FRAME decoder request failed: " + error.getMessage());
+        }
     }
 
     private void completeTriggerAlignedFrameCapture(long id, boolean success, String message) {
@@ -6460,25 +6479,36 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         if (pending.photoSucceeded == null) return;
         if (!pending.photoSucceeded) {
             pendingTriggerFrames.remove(pending.id);
-            if (pending.bitmap != null) pending.bitmap.recycle();
+            discardPendingTriggerFrame(pending);
             return;
         }
         if (pending.bitmap == null) return;
         pendingTriggerFrames.remove(pending.id);
         Bitmap bitmap = pending.bitmap;
-        storageExecutor.execute(() -> saveTriggerAlignedFrame(
-                bitmap, pending.metadata, pending.resultMessage));
+        try {
+            storageExecutor.execute(() -> saveTriggerAlignedFrame(
+                    bitmap, pending.metadata, pending.resultMessage, pending.lease));
+        } catch (java.util.concurrent.RejectedExecutionException error) {
+            bitmap.recycle();
+            pending.lease.close();
+            appendLog("TRIGGER_FRAME writer unavailable; aircraft photo is unaffected");
+        }
+    }
+
+    private void discardPendingTriggerFrame(PendingTriggerFrame pending) {
+        if (pending.bitmap != null) pending.bitmap.recycle();
+        if (!pending.bitmapRequested || pending.bitmapReturned) pending.lease.close();
     }
 
     private void expirePendingTriggerFrame(long id) {
         PendingTriggerFrame pending = pendingTriggerFrames.remove(id);
         if (pending == null) return;
-        if (pending.bitmap != null) pending.bitmap.recycle();
+        discardPendingTriggerFrame(pending);
         appendLog(getString(R.string.trigger_frame_capture_timeout, pending.metadata.getTriggerReason()));
     }
 
     private void saveTriggerAlignedFrame(
-            Bitmap bitmap, TriggerFrameMetadata metadata, String resultMessage) {
+            Bitmap bitmap, TriggerFrameMetadata metadata, String resultMessage, SurveyFrameWorkBudget.Lease lease) {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 94, output)) {
@@ -6516,6 +6546,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
             persistLogLine("TRIGGER_FRAME save failed: " + error.getMessage() + "\n");
         } finally {
             bitmap.recycle();
+            lease.close();
         }
     }
 
@@ -6567,41 +6598,61 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
                 timestamp, frame.getFrameId(), format.toUpperCase(Locale.US));
         String relativeDirectory = "survey/" + safeStorageName(mission.getId());
         String captureEndpoint = resolvedSurveyUeEndpoint();
-        storageExecutor.execute(() -> {
-            try {
-                String imagePath = savePublicDownloadFile(
-                        relativeDirectory, baseName + extension,
-                        frame.getFormat() == HilFrameProtocol.FORMAT_PNG ? "image/png" : "image/jpeg",
-                        frame.getEncoded());
-                SurveyUeCapture capture = new SurveyUeCapture(
-                        System.currentTimeMillis(), mission.getId(), reason,
-                        frame.getFrameId(), frame.getPoseSequence(), format,
-                        frame.getWidth(), frame.getHeight(), frame.getCapturePeerMonotonicNanos(),
-                        imagePath, snapshot.getLatitude(), snapshot.getLongitude(), snapshot.getAltitude(),
-                        snapshot.getHeading(), snapshot.getGimbalPitch(), executionLegIndex, waypointIndex);
-                byte[] metadata = SurveyUeBridgeContract.INSTANCE.encodeCapture(capture)
-                        .getBytes(StandardCharsets.UTF_8);
-                String metadataPath = savePublicDownloadFile(
-                        relativeDirectory, baseName + ".json", "application/json", metadata);
-                writePersistentLogLine(String.format(Locale.US,
-                        "%tF %<tT.%<tL  SURVEY_FRAME image=%s metadata=%s frame=%d pose=%d reason=%s\n",
-                        System.currentTimeMillis(), imagePath, metadataPath,
-                        frame.getFrameId(), frame.getPoseSequence(), reason));
-                ueBridgeClient.postCapture(captureEndpoint, capture, (ok, message) -> {
-                    if (!ok) runOnUiThread(() -> appendLog("UE bridge capture FAIL " + message));
-                });
-                runOnUiThread(() -> {
-                    lastSurveyUeCapturedReceivedNanos = frame.getReceivedAndroidMonotonicNanos();
-                    finishSurveyPhotoRequest(requestGeneration, true,
-                            getString(R.string.ue_frame_saved,
-                                    frame.getFrameId(), frame.getPoseSequence()));
-                });
-            } catch (Throwable error) {
-                Log.e(TAG, "save survey UE frame failed", error);
-                runOnUiThread(() -> finishSurveyPhotoRequest(requestGeneration, false,
-                        getString(R.string.ue_survey_image_save_failed, error.getMessage())));
-            }
-        });
+        SurveyFrameWorkBudget.Lease lease = triggerFrameBudget.tryAcquire();
+        if (lease == null) {
+            finishSurveyPhotoRequest(requestGeneration, false, "HIL phone frame writer busy");
+            return;
+        }
+        try {
+            storageExecutor.execute(() -> {
+                try {
+                    String imagePath = savePublicDownloadFile(
+                            relativeDirectory, baseName + extension,
+                            frame.getFormat() == HilFrameProtocol.FORMAT_PNG ? "image/png" : "image/jpeg",
+                            frame.getEncoded());
+                    SurveyUeCapture capture = new SurveyUeCapture(
+                            System.currentTimeMillis(), mission.getId(), reason,
+                            frame.getFrameId(), frame.getPoseSequence(), format,
+                            frame.getWidth(), frame.getHeight(), frame.getCapturePeerMonotonicNanos(),
+                            imagePath, snapshot.getLatitude(), snapshot.getLongitude(), snapshot.getAltitude(),
+                            snapshot.getHeading(), snapshot.getGimbalPitch(), executionLegIndex, waypointIndex);
+                    byte[] metadata = SurveyUeBridgeContract.INSTANCE.encodeCapture(capture)
+                            .getBytes(StandardCharsets.UTF_8);
+                    String metadataPath = savePublicDownloadFile(
+                            relativeDirectory, baseName + ".json", "application/json", metadata);
+                    writePersistentLogLine(String.format(Locale.US,
+                            "%tF %<tT.%<tL  SURVEY_FRAME image=%s metadata=%s frame=%d pose=%d reason=%s\n",
+                            System.currentTimeMillis(), imagePath, metadataPath,
+                            frame.getFrameId(), frame.getPoseSequence(), reason));
+                    ueBridgeClient.postCapture(captureEndpoint, capture, (ok, message) -> {
+                        if (!ok) runOnUiThread(() -> appendLog("UE bridge capture FAIL " + message));
+                    });
+                    runOnUiThread(() -> {
+                        try {
+                            lastSurveyUeCapturedReceivedNanos = frame.getReceivedAndroidMonotonicNanos();
+                            finishSurveyPhotoRequest(requestGeneration, true,
+                                    getString(R.string.ue_frame_saved,
+                                            frame.getFrameId(), frame.getPoseSequence()));
+                        } finally {
+                            lease.close();
+                        }
+                    });
+                } catch (Throwable error) {
+                    Log.e(TAG, "save survey UE frame failed", error);
+                    runOnUiThread(() -> {
+                        try {
+                            finishSurveyPhotoRequest(requestGeneration, false,
+                                    getString(R.string.ue_survey_image_save_failed, error.getMessage()));
+                        } finally {
+                            lease.close();
+                        }
+                    });
+                }
+            });
+        } catch (java.util.concurrent.RejectedExecutionException error) {
+            lease.close();
+            finishSurveyPhotoRequest(requestGeneration, false, "HIL phone frame writer unavailable");
+        }
     }
 
     private void finishSurveyPhotoRequest(long requestGeneration, boolean ok, String message) {
@@ -11922,7 +11973,7 @@ public final class Mini2CameraActivity extends AppCompatActivity implements Text
         homeMapIcon = null;
         modelExecutor.shutdownNow();
         for (PendingTriggerFrame pending : pendingTriggerFrames.values()) {
-            if (pending.bitmap != null) pending.bitmap.recycle();
+            discardPendingTriggerFrame(pending);
         }
         pendingTriggerFrames.clear();
         storageExecutor.shutdown();

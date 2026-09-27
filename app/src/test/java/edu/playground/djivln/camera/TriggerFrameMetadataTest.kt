@@ -14,12 +14,20 @@ class TriggerFrameMetadataTest {
             gimbalPitchDegrees = -45.0, velocityNorthMetersPerSecond = 1.0,
             velocityEastMetersPerSecond = 2.0, velocityDownMetersPerSecond = -0.5,
             missionId = "mission", executionLegIndex = 4, waypointIndex = 5,
+            aircraftRollDegrees = 1.0, aircraftYawDegrees = 89.5,
+            gimbalRollDegrees = 0.5, gimbalYawDegrees = 12.0,
+            gimbalYawRelativeToAircraftHeadingDegrees = 20.0,
+            gimbalStateUpdatedAtEpochMillis = 122L,
         )
         val json = metadata.toJson("Download/test.jpg")
         assertEquals("openfly.trigger-frame.v1", json.getString("schema"))
         assertEquals(31.1, json.getDouble("latitude"), 0.0)
         assertEquals(4, json.getInt("execution_leg_index"))
         assertTrue(json.getString("image_path").endsWith("test.jpg"))
+        assertEquals(110.0, json.getDouble("camera_yaw_deg_true"), 0.0)
+        assertEquals("aircraft_heading_plus_gimbal_relative_absolute_conflict", json.getString("camera_yaw_source"))
+        assertEquals(98.0, json.getDouble("camera_yaw_consistency_error_deg"), 0.0)
+        assertEquals(1L, json.getLong("gimbal_age_ms"))
     }
 
     @Test fun `GPS and ASL are accepted only while aircraft telemetry is fresh`() {

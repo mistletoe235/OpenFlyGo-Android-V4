@@ -1,5 +1,7 @@
 package edu.playground.djivln.mini2
 
+import org.junit.Assert.assertEquals
+
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -8,6 +10,29 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class CallbackGenerationTest {
+    @Test
+    fun `queued control callback is rejected after a newer transition`() {
+        val generation = CallbackGeneration()
+        var callbacks = 0
+        val delayed = generation.guarded(generation.next(), { true }, Runnable { callbacks++ })
+        generation.next()
+        delayed.run()
+        assertEquals(0, callbacks)
+    }
+
+    @Test
+    fun `queued control callback checks controller identity when dispatched`() {
+        val generation = CallbackGeneration()
+        var sameController = true
+        var callbacks = 0
+        val delayed = generation.guarded(generation.next(), { sameController }, Runnable { callbacks++ })
+        sameController = false
+        delayed.run()
+        assertEquals(0, callbacks)
+        generation.guarded(generation.current(), { true }, Runnable { callbacks++ }).run()
+        assertEquals(1, callbacks)
+    }
+
     @Test
     fun `advancing a generation rejects every older callback`() {
         val gate = CallbackGeneration()
